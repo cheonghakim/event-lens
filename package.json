@@ -1,0 +1,58 @@
+{
+  "name": "trace-scope",
+  "version": "0.1.0",
+  "description": "Enterprise security event viewer library for SOC/SIEM/SOAR",
+  "homepage": "https://cheonghakim.github.io/trace-scope",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheonghakim/trace-scope.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cheonghakim/trace-scope/issues"
+  },
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./style": "./dist/trace-scope.css"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:demo": "vite build --config vite.demo.config.js",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "storybook": "storybook dev -p 6006",
+    "build:storybook": "storybook build",
+    "benchmark": "node scripts/benchmark.js",
+    "a11y": "npx playwright test scripts/a11y-audit.spec.js --reporter=list",
+    "a11y:install": "npx playwright install --with-deps chromium"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "@playwright/test": "^1.60.0",
+    "@storybook/addon-a11y": "^10.4.1",
+    "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/html-vite": "^10.4.1",
+    "axe-playwright": "^2.2.2",
+    "jsdom": "^29.1.1",
+    "storybook": "^10.4.1",
+    "vite": "^6.0.0",
+    "vitest": "^4.1.8"
+  }
+}

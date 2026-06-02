@@ -1,0 +1,46 @@
+/* TraceScope — severity badges & row indicators */
+
+/* ── Badge: dot + colored text, subtle bg ── */
+.ts-badge {
+  display:        inline-flex;
+  align-items:    center;
+  gap:            5px;
+  padding:        2px 6px;
+  border-radius:  2px;
+  font-size:      10px;
+  font-weight:    600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space:    nowrap;
+  flex-shrink:    0;
+  line-height:    1;
+}
+
+.ts-badge::before {
+  content:       '';
+  width:         5px;
+  height:        5px;
+  border-radius: 50%;
+  background:    currentColor;
+  flex-shrink:   0;
+}
+
+.ts-badge--critical { color: var(--ts-color-critical); background: var(--ts-badge-bg-critical); }
+.ts-badge--high     { color: var(--ts-color-high);     background: var(--ts-badge-bg-high);     }
+.ts-badge--medium   { color: var(--ts-color-medium);   background: var(--ts-badge-bg-medium);   }
+.ts-badge--low      { color: var(--ts-color-low);      background: var(--ts-badge-bg-low);      }
+.ts-badge--info     { color: var(--ts-color-info);     background: var(--ts-badge-bg-info);     }
+.ts-badge--unknown  { color: var(--ts-color-unknown);  background: var(--ts-badge-bg-unknown);  }
+
+/* ── Row left-border severity stripe ── */
+.ts-row--critical { border-left: 2px solid var(--ts-color-critical); }
+.ts-row--high     { border-left: 2px solid var(--ts-color-high);     }
+.ts-row--medium   { border-left: 2px solid var(--ts-color-medium);   }
+.ts-row--low      { border-left: 2px solid var(--ts-color-low);      }
+.ts-row--info     { border-left: 2px solid var(--ts-color-info);     }
+.ts-row--unknown  { border-left: 2px solid var(--ts-color-unknown);  }
+
+/* Critical row: very faint tint — most other rows have no bg tint */
+.ts-row--critical {
+  background: rgba(224, 82, 82, 0.025);
+}

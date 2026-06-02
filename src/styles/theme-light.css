@@ -1,0 +1,66 @@
+/* TraceScope — Light theme */
+
+[data-ts-theme="light"],
+.ts-root[data-ts-theme="light"] {
+  --ts-font-family:    'Inter', 'Noto Sans KR', -apple-system, sans-serif;
+  --ts-font-size:      13px;
+  --ts-line-height:    1.4;
+
+  /* Row heights */
+  --ts-row-height:             32px;
+  --ts-row-height-compact:     24px;
+  --ts-row-height-comfortable: 40px;
+
+  /* Header */
+  --ts-header-height:  34px;
+
+  /* Base colors */
+  --ts-bg:             #f8f8f8;
+  --ts-bg-alt:         #f1f1f1;
+  --ts-bg-elevated:    #ffffff;
+  --ts-border:         #d4d4d4;
+  --ts-border-dashed:  #c0c0c0;
+  --ts-border-hover:   #888888;
+  --ts-row-border:     #ebebeb;
+  --ts-text:           #1a1a1a;
+  --ts-text-muted:     #999999;
+  --ts-text-secondary: #666666;
+  --ts-accent:         #2563eb;
+  --ts-accent-hover:   #1d4ed8;
+
+  /* Header & Panel */
+  --ts-header-bg:      #f1f1f1;
+  --ts-panel-bg:       #f8f8f8;
+  --ts-panel-border:   #d4d4d4;
+
+  /* Row states */
+  --ts-row-hover-bg:    #efefef;
+  --ts-row-selected-bg: rgba(37, 99, 235, 0.06);
+  --ts-row-selected-border: rgba(37, 99, 235, 0.4);
+
+  /* Log viewer */
+  --ts-log-bg:         #fcfcfc;
+  --ts-log-text:       #2d2d2d;
+
+  /* Severity — slightly darker for light background */
+  --ts-color-critical: #c43030;
+  --ts-color-high:     #b85e18;
+  --ts-color-medium:   #8b6a12;
+  --ts-color-low:      #2d7a35;
+  --ts-color-info:     #1a5fb5;
+  --ts-color-unknown:  #707070;
+
+  /* Severity badge backgrounds */
+  --ts-badge-bg-critical: rgba(196, 48,  48,  0.08);
+  --ts-badge-bg-high:     rgba(184, 94,  24,  0.08);
+  --ts-badge-bg-medium:   rgba(139, 106, 18,  0.08);
+  --ts-badge-bg-low:      rgba(45,  122, 53,  0.08);
+  --ts-badge-bg-info:     rgba(26,  95,  181, 0.08);
+  --ts-badge-bg-unknown:  rgba(112, 112, 112, 0.08);
+
+  /* Scrollbar */
+  --ts-scroll-track:       #ececec;
+  --ts-scroll-thumb:       #cccccc;
+  --ts-scroll-thumb-hover: #aaaaaa;
+  --ts-scroll-width:       5px;
+}

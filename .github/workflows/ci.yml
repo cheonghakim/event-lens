@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Job 1: unit tests + library build ────────────────────────────────────────
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Build library
+        run: npm run build
+
+      - name: Build GitHub Pages demo
+        run: npm run build:demo
+
+      - name: Verify dist outputs
+        run: |
+          test -f dist/index.mjs      || (echo "MISSING: dist/index.mjs"      && exit 1)
+          test -f dist/index.cjs      || (echo "MISSING: dist/index.cjs"      && exit 1)
+          test -f dist/tracescope.css || (echo "MISSING: dist/tracescope.css" && exit 1)
+          test -f docs/index.html     || (echo "MISSING: docs/index.html"     && exit 1)
+          echo "All dist files present."
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  # ── Job 2: axe-core accessibility audit ──────────────────────────────────────
+  a11y:
+    name: Accessibility audit (axe-core WCAG 2.1 AA)
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build demo for audit
+        run: npm run build:demo
+
+      - name: Run axe-core audit
+        run: npm run a11y
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14

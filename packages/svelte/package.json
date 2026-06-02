@@ -1,0 +1,27 @@
+{
+  "name": "@trace-scope/svelte",
+  "version": "0.1.0",
+  "description": "Svelte wrapper for TraceScope",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "svelte": "./src/TraceScope.svelte",
+      "types":  "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require":"./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "src"],
+  "peerDependencies": {
+    "svelte":    ">=4.0.0",
+    "trace-scope": ">=0.1.0"
+  },
+  "devDependencies": {
+    "svelte":          "^4.0.0",
+    "vite":            "^6.0.0",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0"
+  }
+}

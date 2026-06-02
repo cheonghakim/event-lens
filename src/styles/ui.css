@@ -1,0 +1,215 @@
+/* TraceScope — UI components (DateRangePicker, etc.) */
+
+/* Scoped reset for popover elements appended to document.body */
+.ts-drp-root,
+.ts-drp-root *,
+.ts-drp-root *::before,
+.ts-drp-root *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--ts-font-family, 'Inter', system-ui, sans-serif);
+}
+.ts-drp-root button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+}
+.ts-drp-root button:focus-visible { outline: 2px solid var(--ts-accent, #2563eb); outline-offset: 2px; }
+
+/* ═══════════════════════════════════════════════════════
+   DateRangePicker
+   ═══════════════════════════════════════════════════════ */
+.ts-drp { position: relative; display: inline-flex; }
+
+.ts-drp-trigger {
+  min-width:           160px;
+  justify-content:     center;
+  font-variant-numeric: tabular-nums;
+  /* .ts-btn 상속으로 dashed outline 자동 적용 */
+}
+
+.ts-drp-popover {
+  background:   var(--ts-bg-elevated);
+  border:       1px solid var(--ts-border);
+  border-radius: 3px;
+  box-shadow:   0 12px 32px rgba(0,0,0,0.45);
+  padding:      12px;
+  width:        284px;
+  user-select:  none;
+  z-index:      10000;
+  max-width:    90vw;
+}
+
+/* Range labels */
+.ts-drp-title {
+  display:       flex;
+  align-items:   center;
+  gap:           6px;
+  margin-bottom: 10px;
+  font-size:     11px;
+}
+
+.ts-drp-range-label {
+  flex:           1;
+  text-align:     center;
+  padding:        3px 6px;
+  border:         1px solid var(--ts-border);
+  border-radius:  2px;
+  color:          var(--ts-text-muted);
+  font-size:      10px;
+  font-variant-numeric: tabular-nums;
+  background:     var(--ts-bg-alt);
+}
+
+.ts-drp-range-active {
+  border-color: var(--ts-accent);
+  color:        var(--ts-accent);
+}
+
+.ts-drp-sep {
+  color:      var(--ts-text-muted);
+  font-size:  11px;
+  flex-shrink: 0;
+}
+
+/* Calendar navigation */
+.ts-drp-nav {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  margin-bottom:   8px;
+}
+
+.ts-drp-nav-btn {
+  width:   24px;
+  height:  24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.ts-drp-month-label {
+  font-size:  11px;
+  font-weight: 600;
+  color:      var(--ts-text);
+}
+
+/* Day names header */
+.ts-drp-days-header {
+  display:               grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom:         4px;
+}
+
+.ts-drp-day-name {
+  text-align:  center;
+  font-size:   9px;
+  color:       var(--ts-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  padding:     2px 0;
+}
+
+/* Days grid */
+.ts-drp-days-grid {
+  display:               grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap:                   1px;
+}
+
+.ts-drp-day {
+  aspect-ratio:  1;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  font-size:     11px;
+  font-variant-numeric: tabular-nums;
+  cursor:        pointer;
+  border-radius: 2px;
+  color:         var(--ts-text-secondary);
+  background:    transparent;
+  border:        none;
+  font-family:   inherit;
+  transition:    background 0.1s, color 0.1s;
+}
+
+.ts-drp-day:hover:not(.ts-drp-day--empty) {
+  background: var(--ts-row-hover-bg);
+  color:      var(--ts-text);
+}
+
+.ts-drp-day--empty  { pointer-events: none; }
+.ts-drp-day--today  { color: var(--ts-accent); font-weight: 600; }
+
+.ts-drp-day--from,
+.ts-drp-day--to {
+  background: var(--ts-accent) !important;
+  color:      #fff !important;
+  font-weight: 600;
+}
+
+.ts-drp-day--in-range {
+  background: rgba(37, 99, 235, 0.10);
+  color:      var(--ts-text);
+  border-radius: 0;
+}
+
+/* Time row */
+.ts-drp-time-row {
+  display:       flex;
+  align-items:   center;
+  gap:           6px;
+  margin-top:    10px;
+  padding-top:   10px;
+  border-top:    1px solid var(--ts-border);
+}
+
+.ts-drp-time-wrap {
+  display:     flex;
+  align-items: center;
+  gap:         4px;
+  flex:        1;
+}
+
+.ts-drp-time-label {
+  font-size:  10px;
+  color:      var(--ts-text-muted);
+  white-space: nowrap;
+}
+
+.ts-drp-time-input {
+  flex:          1;
+  height:        26px;
+  padding:       0 6px;
+  border:        1px dashed var(--ts-border-dashed);
+  border-radius: 2px;
+  background:    transparent;
+  color:         var(--ts-text);
+  font-size:     11px;
+  font-family:   inherit;
+  font-variant-numeric: tabular-nums;
+  transition:    border-style 0.12s, border-color 0.12s;
+}
+
+.ts-drp-time-input:hover { border-style: solid; }
+.ts-drp-time-input:focus { border-style: solid; border-color: var(--ts-accent); outline: none; }
+
+/* time input color scheme for dark mode */
+.ts-drp-time-input::-webkit-calendar-picker-indicator { display: none; }
+
+/* Actions */
+.ts-drp-actions {
+  display:       flex;
+  justify-content: flex-end;
+  gap:           6px;
+  margin-top:    10px;
+  padding-top:   10px;
+  border-top:    1px solid var(--ts-border);
+}
