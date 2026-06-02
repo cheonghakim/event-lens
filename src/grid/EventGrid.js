@@ -269,7 +269,7 @@ export class EventGrid {
   }
 
   _updateHeaderMinWidth() {
-    const total = this._cm.getTotalWidth() + 50  // +50 for picker cell
+    const total = this._cm.getTotalWidth()
     if (this._header._el) this._header._el.style.minWidth = `${total}px`
   }
 
