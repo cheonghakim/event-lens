@@ -32,7 +32,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:demo": "vite build --config vite.demo.config.js",
+    "build:demo": "node scripts/build-demo.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

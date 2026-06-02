@@ -3,438 +3,247 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TraceScope — Demo</title>
+  <title>TraceScope Demo</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="./dist/trace-scope.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
     body {
       background: #0d0d0d;
-      font-family: 'Inter', 'Noto Sans KR', sans-serif;
+      color: #d8d8d8;
+      font-family: Inter, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+    .demo-shell {
       height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      min-height: 0;
     }
-
-    /* Demo toolbar */
-    #demo-bar {
+    .demo-bar {
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 8px 16px;
+      gap: 10px;
+      min-height: 46px;
+      padding: 7px 14px;
+      border-bottom: 1px solid #242424;
       background: #111;
-      border-bottom: 1px solid #222;
-      font-size: 13px;
-      color: #aaa;
+      white-space: nowrap;
+      overflow-x: auto;
     }
-    #demo-bar strong { color: #1677ff; font-size: 15px; }
-    #demo-bar button {
+    .demo-title {
+      color: #4e9cff;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .demo-sep { color: #3a3a3a; }
+    .demo-button {
       height: 28px;
-      padding: 0 12px;
+      padding: 0 10px;
       border: 1px solid #333;
       border-radius: 4px;
       background: #1a1a1a;
-      color: #ccc;
+      color: #cfcfcf;
+      font: inherit;
       font-size: 12px;
       cursor: pointer;
     }
-    #demo-bar button:hover { border-color: #1677ff; color: #1677ff; }
-    #demo-bar .sep { color: #333; }
-    #demo-bar span { font-size: 11px; color: #555; }
-    #demo-bar .plugin-tag {
-      display: inline-flex; align-items: center;
-      gap: 3px; font-size: 10px; color: #666;
-      border: 1px solid #2a2a2a; border-radius: 3px;
-      padding: 0 6px; height: 22px; pointer-events: none;
+    .demo-button:hover {
+      border-color: #4e9cff;
+      color: #fff;
     }
-    #demo-bar .plugin-tag.active { color: #1677ff; border-color: #1677ff33; background: #1677ff0d; }
-
+    .demo-info {
+      color: #767676;
+      font-size: 12px;
+    }
     #viewer {
-      flex: 1 1 0;
-      overflow: hidden;
+      flex: 1 1 auto;
+      min-height: 0;
     }
   </style>
 </head>
 <body>
+  <div class="demo-shell">
+    <div class="demo-bar">
+      <div class="demo-title">TraceScope</div>
+      <div class="demo-sep">|</div>
+      <button class="demo-button" id="btn-theme">Light</button>
+      <button class="demo-button" id="btn-density">Compact</button>
+      <button class="demo-button" id="btn-add">Add 100</button>
+      <button class="demo-button" id="btn-live">Start Live</button>
+      <div class="demo-sep">|</div>
+      <div class="demo-info" id="demo-info">5,000 security events</div>
+    </div>
+    <div id="viewer"></div>
+  </div>
 
-<div id="demo-bar">
-  <strong>TraceScope</strong>
-  <span class="sep">|</span>
-  <button id="btn-theme">☀ Light</button>
-  <button id="btn-density">≡ Compact</button>
-  <button id="btn-live">▶ Live 시작</button>
-  <button id="btn-add100">+ 이벤트 100건</button>
-  <button id="btn-worker">⚙ Worker: OFF</button>
-  <span class="sep">|</span>
-  <button id="btn-masking">👁 마스킹 ON</button>
-  <span class="sep">|</span>
-  <span class="plugin-tag active" title="CSV/JSON/JSONL 내보내기">Export</span>
-  <span class="plugin-tag active" title="목적지 IP 국가 표시 (Mock)">GeoIP</span>
-  <span class="plugin-tag active" title="출발지 IP 위협 평판 (Mock)">위협Intel</span>
-  <span class="plugin-tag active" title="룰명에 ATT&CK 태그 표시">MITRE</span>
-  <span class="plugin-tag active" title="user 필드 마스킹 (클릭으로 원문)">마스킹</span>
-  <span class="plugin-tag active" title="이벤트 상세 패널 SOAR 액션">SOAR</span>
-  <span class="sep">|</span>
-  <span id="demo-info">6 Plugins Active — 5,000건</span>
-</div>
+  <script type="module">
+    import { TraceScope, ExportPlugin } from './dist/index.mjs'
 
-<div id="viewer"></div>
+    TraceScope.use(ExportPlugin)
 
-<script type="module">
-import {
-  TraceScope, WorkerBridge, StaticArrayAdapter,
-  ExportPlugin, LocalGeoIpPlugin, ThreatIntelPlugin,
-  MitrePlugin, MaskingPlugin, SoarPlugin,
-} from './src/index.js'
-
-// ── Demo mock data for plugins ─────────────────────────────────────────────
-
-// LocalGeoIpPlugin — dst_ip 국가 표시 (외부 API 없이)
-const MOCK_GEO = {
-  '10.0.0.1':      { countryCode: 'KR', country: 'Korea',      city: 'Seoul'         },
-  '10.0.0.2':      { countryCode: 'KR', country: 'Korea',      city: 'Seoul'         },
-  '192.168.99.1':  { countryCode: 'KR', country: 'Korea',      city: 'Busan'         },
-  '8.8.8.8':       { countryCode: 'US', country: 'United States', city: 'Mountain View' },
-  '1.1.1.1':       { countryCode: 'AU', country: 'Australia',  city: 'Sydney'        },
-}
-
-// ThreatIntelPlugin — src_ip 위협 평판 (Mock)
-const MOCK_THREATS = {
-  '203.0.113.8':   { malicious: true,  score: 92, tags: ['botnet', 'scanner'],  source: 'DemoIntel' },
-  '198.51.100.44': { malicious: true,  score: 78, tags: ['malware', 'c2'],      source: 'DemoIntel' },
-  '192.168.1.100': { malicious: false, score:  3, tags: [],                     source: 'DemoIntel' },
-  '10.0.0.55':     { malicious: false, score:  1, tags: [],                     source: 'DemoIntel' },
-  '172.16.3.21':   { malicious: false, score:  2, tags: [],                     source: 'DemoIntel' },
-}
-
-// MitrePlugin — rule_id → ATT&CK technique 매핑
-const MITRE_RULE_MAP = {
-  'R1000': [{ id: 'T1021.004', name: 'Remote Services: SSH',          tactic: 'Lateral Movement'    }],
-  'R1001': [{ id: 'T1190',     name: 'Exploit Public-Facing App',     tactic: 'Initial Access'      }],
-  'R1002': [{ id: 'T1110',     name: 'Brute Force',                   tactic: 'Credential Access'   }],
-  'R1003': [{ id: 'T1498',     name: 'Network Denial of Service',     tactic: 'Impact'              }],
-  'R1004': [{ id: 'T1071',     name: 'Application Layer Protocol',    tactic: 'Command and Control' }],
-  'R1005': [{ id: 'T1046',     name: 'Network Service Discovery',     tactic: 'Discovery'           }],
-  'R1006': [{ id: 'T1068',     name: 'Exploitation for Privilege Esc',tactic: 'Privilege Escalation'}],
-  'R1007': [{ id: 'T1041',     name: 'Exfiltration Over C2 Channel',  tactic: 'Exfiltration'        }],
-  'R1008': [{ id: 'T1078',     name: 'Valid Accounts',                tactic: 'Defense Evasion'     }],
-}
-
-// ── Sample data generator ──────────────────────────────────────────────────
-const SEVERITIES = ['critical','critical','high','high','medium','medium','low','info']
-const ACTIONS    = ['denied','allowed','dropped','reset','blocked']
-const SRC_IPS    = ['192.168.1.100','10.0.0.55','172.16.3.21','203.0.113.8','198.51.100.44']
-const DST_IPS    = ['10.0.0.1','10.0.0.2','192.168.99.1','8.8.8.8','1.1.1.1']
-const USERS      = ['admin','user_kim','svc_account','anonymous','root']
-const ASSETS     = ['db-server-01','web-server-02','fw-edge-01','ad-controller','vpn-gw']
-const RULES      = [
-  '외부 SSH 접근 차단', 'SQL Injection 탐지', 'Brute Force 로그인',
-  'DDoS 트래픽 감지', '악성 IP 차단', '포트 스캔 탐지',
-  '권한 상승 시도', '데이터 유출 경고', '비인가 접근'
-]
-const EVENT_TYPES = ['firewall','ids','auth','network','endpoint']
-
-let eventCounter = 1
-
-function generateEvent(overrideSeverity) {
-  const idx      = Math.floor(Math.random() * SEVERITIES.length)
-  const severity = overrideSeverity || SEVERITIES[idx]
-  const ruleIdx  = Math.floor(Math.random() * RULES.length)
-  const srcIp    = SRC_IPS[Math.floor(Math.random() * SRC_IPS.length)]
-  const dstIp    = DST_IPS[Math.floor(Math.random() * DST_IPS.length)]
-  const user     = USERS[Math.floor(Math.random() * USERS.length)]
-  const asset    = ASSETS[Math.floor(Math.random() * ASSETS.length)]
-  const action   = ACTIONS[Math.floor(Math.random() * ACTIONS.length)]
-  const srcPort  = Math.floor(Math.random() * 60000) + 1024
-  const dstPort  = [22, 80, 443, 3306, 5432, 8080][Math.floor(Math.random() * 6)]
-  const id       = `evt-${String(eventCounter++).padStart(6,'0')}`
-  const now      = new Date(Date.now() - Math.random() * 3600000)
-
-  return {
-    id,
-    timestamp:  now.toISOString(),
-    severity,
-    risk_score: severity === 'critical' ? Math.floor(Math.random()*15)+85
-              : severity === 'high'     ? Math.floor(Math.random()*20)+60
-              : severity === 'medium'   ? Math.floor(Math.random()*20)+40
-              :                          Math.floor(Math.random()*30)+10,
-    src_ip:     srcIp,
-    dst_ip:     dstIp,
-    src_port:   srcPort,
-    dst_port:   dstPort,
-    protocol:   'TCP',
-    action,
-    rule_id:    `R${1000 + ruleIdx}`,
-    rule_name:  RULES[ruleIdx],
-    user,
-    asset,
-    event_type: EVENT_TYPES[Math.floor(Math.random() * EVENT_TYPES.length)],
-    raw_log:    `${now.toISOString()} ${asset} kernel: [${action.toUpperCase()}] ` +
-                `IN=eth0 SRC=${srcIp} DST=${dstIp} PROTO=TCP SPT=${srcPort} DPT=${dstPort} ` +
-                `USER=${user} RULE=R${1000+ruleIdx} MD5=a3f1b2c4d5e6f7a8b9c0d1e2f3a4b5c6`,
-    parsed: {
-      protocol:  'TCP',
-      src_port:  srcPort,
-      dst_port:  dstPort,
-      device:    asset,
-      bytes_in:  Math.floor(Math.random() * 10000),
-      bytes_out: Math.floor(Math.random() * 100000),
-      session_id: `sess-${Math.random().toString(36).slice(2,10)}`,
-      flags:     ['SYN','ACK','RST'][Math.floor(Math.random()*3)],
-    },
-    timeline: [
-      {
-        id: 't1', type: 'detection',
-        time: new Date(now.getTime() + 100).toISOString(),
-        status: 'done', actor: 'SIEM',
-        detail: `룰 R${1000+ruleIdx} 매칭 (${RULES[ruleIdx]})`
-      },
-      {
-        id: 't2', type: 'alert',
-        time: new Date(now.getTime() + 500).toISOString(),
-        status: 'done', actor: 'System',
-        detail: '담당자 이메일 알림 발송'
-      },
-      {
-        id: 't3', type: 'investigation',
-        time: severity === 'critical' ? new Date(now.getTime() + 60000).toISOString() : null,
-        status: severity === 'critical' ? 'done' : 'pending',
-        actor: severity === 'critical' ? 'analyst_kim' : null,
-        detail: severity === 'critical' ? '원문 로그 및 관련 이벤트 확인' : '대기 중'
-      },
-      ...(severity === 'critical' ? [{
-        id: 't4', type: 'soar_action',
-        time: new Date(now.getTime() + 120000).toISOString(),
-        status: 'running', actor: 'SOAR',
-        detail: 'Playbook #7 자동 차단 실행 중'
-      }] : [])
+    const severities = ['critical', 'high', 'medium', 'low', 'info']
+    const actions = ['blocked', 'denied', 'allowed', 'dropped', 'reset']
+    const srcIps = ['192.168.1.100', '10.0.0.55', '172.16.3.21', '203.0.113.8', '198.51.100.44']
+    const dstIps = ['10.0.0.1', '10.0.0.2', '192.168.99.1', '8.8.8.8', '1.1.1.1']
+    const users = ['admin', 'user_kim', 'svc_account', 'anonymous', 'root']
+    const assets = ['db-server-01', 'web-server-02', 'fw-edge-01', 'ad-controller', 'vpn-gw']
+    const rules = [
+      'Unauthorized SSH access',
+      'SQL injection attempt',
+      'Brute force login',
+      'DDoS traffic spike',
+      'Known malicious IP',
+      'Port scan detected',
+      'Privilege escalation attempt',
+      'Data exfiltration warning',
+      'Suspicious account activity',
     ]
-  }
-}
 
-// Generate 5,000 events
-const INITIAL_COUNT = 5000
-const events = Array.from({ length: INITIAL_COUNT }, () => generateEvent())
-// Sort by timestamp descending
-events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    let eventCounter = 1
 
-// ── TraceScope instantiation ───────────────────────────────────────────────
-const viewer = new TraceScope({
-  container: '#viewer',
-  dataSource: events,
-  theme:      'dark',
-  density:    'normal',
-  plugins: [
-    ExportPlugin,
+    function pick(values) {
+      return values[Math.floor(Math.random() * values.length)]
+    }
 
-    // GeoIP: dst_ip 국가 표시 — 외부 API 없이 Mock lookup 사용
-    LocalGeoIpPlugin.configure({
-      ipFields: ['dst_ip'],
-      lookup:   (ip) => MOCK_GEO[ip] || null,
-    }),
+    function generateEvent(severityOverride) {
+      const severity = severityOverride || pick(severities)
+      const srcIp = pick(srcIps)
+      const dstIp = pick(dstIps)
+      const action = pick(actions)
+      const user = pick(users)
+      const asset = pick(assets)
+      const ruleIndex = Math.floor(Math.random() * rules.length)
+      const dstPort = pick([22, 80, 443, 3306, 5432, 8080])
+      const srcPort = Math.floor(Math.random() * 60000) + 1024
+      const now = new Date(Date.now() - Math.random() * 3_600_000)
+      const id = `evt-${String(eventCounter++).padStart(6, '0')}`
+      const risk =
+        severity === 'critical' ? Math.floor(Math.random() * 15) + 85 :
+        severity === 'high' ? Math.floor(Math.random() * 20) + 60 :
+        severity === 'medium' ? Math.floor(Math.random() * 20) + 40 :
+        Math.floor(Math.random() * 30) + 10
 
-    // ThreatIntel: src_ip 위협 평판 — Mock lookup 사용
-    ThreatIntelPlugin.configure({
-      ipFields: ['src_ip'],
-      lookup:   async (value) =>
-        MOCK_THREATS[value] || { malicious: false, score: 1, tags: [], source: 'DemoIntel' },
-    }),
-
-    // MITRE: rule_name 컬럼에 ATT&CK 태그 표시
-    MitrePlugin.configure({ ruleMap: MITRE_RULE_MAP }),
-
-    // Masking: user 필드 마스킹 (클릭으로 원문 확인 가능)
-    MaskingPlugin.configure({ fields: ['user'], reveal: true }),
-
-    // SOAR: auto 플레이북 (Live 이벤트 자동 실행) + 수동 버튼
-    SoarPlugin.configure({
-      playbooks: [
-        {
-          id:          'auto-block-critical',
-          label:       'Critical IP 자동 차단',
-          auto:        true,
-          cooldown:    30_000,                         // 동일 src_ip 30초 내 재실행 방지
-          cooldownKey: (e) => e.src_ip,
-          when:        (e) => e.severity === 'critical' && !!e.src_ip,
-          endpoint:    'https://httpbin.org/post',
-          payload:     (e) => ({ src_ip: e.src_ip, rule_id: e.rule_id, auto: true }),
+      return {
+        id,
+        timestamp: now.toISOString(),
+        severity,
+        risk_score: risk,
+        src_ip: srcIp,
+        dst_ip: dstIp,
+        src_port: srcPort,
+        dst_port: dstPort,
+        protocol: 'TCP',
+        action,
+        rule_id: `R${1000 + ruleIndex}`,
+        rule_name: rules[ruleIndex],
+        user,
+        asset,
+        event_type: pick(['firewall', 'ids', 'auth', 'network', 'endpoint']),
+        raw_log:
+          `${now.toISOString()} ${asset} kernel: [${action.toUpperCase()}] ` +
+          `SRC=${srcIp} DST=${dstIp} PROTO=TCP SPT=${srcPort} DPT=${dstPort} ` +
+          `USER=${user} RULE=R${1000 + ruleIndex} SHA256=a3f1b2c4d5e6f7a8b9c0d1e2f3a4b5c6`,
+        parsed: {
+          protocol: 'TCP',
+          src_port: srcPort,
+          dst_port: dstPort,
+          device: asset,
+          bytes_in: Math.floor(Math.random() * 10000),
+          bytes_out: Math.floor(Math.random() * 100000),
+          session_id: `sess-${Math.random().toString(36).slice(2, 10)}`,
         },
+        timeline: [
+          { id: 't1', type: 'detection', time: now.toISOString(), status: 'done', actor: 'SIEM', detail: rules[ruleIndex] },
+          { id: 't2', type: 'alert', time: new Date(now.getTime() + 500).toISOString(), status: 'done', actor: 'System', detail: 'Alert created' },
+          { id: 't3', type: 'investigation', status: severity === 'critical' ? 'running' : 'pending', actor: severity === 'critical' ? 'analyst' : undefined },
+        ],
+      }
+    }
+
+    const events = Array.from({ length: 5000 }, () => generateEvent())
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+
+    const viewer = new TraceScope({
+      container: '#viewer',
+      dataSource: events,
+      theme: 'dark',
+      density: 'normal',
+      worker: true,
+      columns: [
+        { id: 'severity', field: 'severity', label: 'Severity', width: 92 },
+        { id: 'timestamp', field: 'timestamp', label: 'Time', width: 158 },
+        { id: 'src_ip', field: 'src_ip', label: 'Src IP', width: 132 },
+        { id: 'dst_ip', field: 'dst_ip', label: 'Dst IP', width: 132 },
+        { id: 'dst_port', field: 'dst_port', label: 'Port', width: 64 },
+        { id: 'action', field: 'action', label: 'Action', width: 88 },
+        { id: 'rule_name', field: 'rule_name', label: 'Rule', width: 220 },
+        { id: 'user', field: 'user', label: 'User', width: 120 },
+        { id: 'asset', field: 'asset', label: 'Asset', width: 130 },
+        { id: 'risk_score', field: 'risk_score', label: 'Risk', width: 80 },
+      ],
+      highlightRules: [
+        { priority: 100, when: event => event.severity === 'critical', className: 'ts-row--highlight-critical' },
+      ],
+      actions: [
         {
-          id:      'manual-isolate',
-          label:   '호스트 격리',
-          auto:    false,
-          when:    (e) => !!e.asset,
-          endpoint: 'https://httpbin.org/post',
-          payload:  (e) => ({ asset: e.asset, event_id: e.id }),
+          id: 'create-ticket',
+          label: 'Create Ticket',
+          handler: event => window.alert(`Ticket created for ${event.id}`),
         },
       ],
-      onSuccess: (pb, event) => {
-        const msg = pb.auto
-          ? `⚡ [자동] SOAR 실행 완료\n「${pb.label}」\n대상 IP: ${event.src_ip}`
-          : `✓ SOAR 실행 완료\n「${pb.label}」\n대상: ${event.src_ip || event.asset}`
-        console.log('[SOAR]', msg.replace(/\n/g, ' '))
-        if (!pb.auto) alert(msg)
+      detail: {
+        layout: 'right',
+        width: 480,
+        tabs: ['parsedFields', 'rawLog', 'timeline'],
+        defaultTab: 'parsedFields',
       },
-      onError: (pb, event, err) =>
-        console.warn(`[SOAR] ✗ ${pb.label} 실패:`, err.message),
-    }),
-  ],
-  columns: [
-    { id: 'severity',   field: 'severity',   label: 'Severity',  width: 88  },
-    { id: 'timestamp',  field: 'timestamp',  label: 'Time',      width: 148 },
-    { id: 'src_ip',     field: 'src_ip',     label: 'Src IP',    width: 132 },
-    { id: 'dst_ip',     field: 'dst_ip',     label: 'Dst IP',    width: 132 },
-    { id: 'dst_port',   field: 'dst_port',   label: 'Port',      width: 60  },
-    { id: 'action',     field: 'action',     label: 'Action',    width: 80  },
-    { id: 'rule_name',  field: 'rule_name',  label: 'Rule',      width: 200 },
-    { id: 'user',       field: 'user',       label: 'User',      width: 110 },
-    { id: 'asset',      field: 'asset',      label: 'Asset',     width: 120 },
-    {
-      id: 'risk_score', field: 'risk_score', label: 'Risk', width: 80, sortable: true,
-      // 커스텀 렌더러 예제 — HTMLElement 또는 HTML 문자열을 반환할 수 있습니다
-      renderer: (value) => {
-        if (value == null) return '<span style="color:#555">-</span>'
-        const pct   = Math.min(100, Math.max(0, value))
-        const color = pct >= 80 ? '#e05252' : pct >= 60 ? '#d07832' : pct >= 40 ? '#b89030' : '#4a9e52'
-        const el = document.createElement('span')
-        el.style.cssText = 'display:inline-flex;align-items:center;gap:5px;width:100%'
-        el.innerHTML = `
-          <span style="flex:1;height:3px;background:#1e1e1e;border-radius:2px;overflow:hidden">
-            <span style="display:block;width:${pct}%;height:100%;background:${color};border-radius:2px;transition:width .3s"></span>
-          </span>
-          <span style="font-size:10px;color:#8a8a8a;font-variant-numeric:tabular-nums;min-width:24px;text-align:right">${pct}</span>`
-        return el
-      },
-    },
-  ],
-  highlightRules: [
-    {
-      priority: 100,
-      when: e => e.severity === 'critical',
-      className: 'ts-row--highlight-critical'
-    }
-  ],
-  actions: [
-    {
-      id:      'create-ticket',
-      label:   '티켓 생성',
-      icon:    '+',
-      group:   'investigate',
-      handler: (event) => {
-        alert(`티켓 생성: [${event.severity.toUpperCase()}] ${event.rule_name}\nEvent ID: ${event.id}`)
+    })
+
+    const root = () => document.querySelector('#viewer .ts-root')
+    const info = document.getElementById('demo-info')
+    let currentTheme = 'dark'
+    let currentDensity = 'normal'
+    let liveTimer = null
+
+    document.getElementById('btn-theme').addEventListener('click', event => {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark'
+      root().dataset.tsTheme = currentTheme
+      event.currentTarget.textContent = currentTheme === 'dark' ? 'Light' : 'Dark'
+    })
+
+    document.getElementById('btn-density').addEventListener('click', event => {
+      const next = currentDensity === 'normal' ? 'compact' : currentDensity === 'compact' ? 'comfortable' : 'normal'
+      currentDensity = next
+      root().dataset.tsDensity = next
+      event.currentTarget.textContent = next === 'normal' ? 'Compact' : next === 'compact' ? 'Comfortable' : 'Normal'
+    })
+
+    document.getElementById('btn-add').addEventListener('click', () => {
+      const batch = Array.from({ length: 100 }, () => generateEvent())
+      viewer._dataSource.pushLiveEvents?.(batch)
+      viewer.refresh()
+      info.textContent = `${viewer._dataSource.getTotalCount().toLocaleString()} security events`
+    })
+
+    document.getElementById('btn-live').addEventListener('click', event => {
+      if (liveTimer) {
+        clearInterval(liveTimer)
+        liveTimer = null
+        event.currentTarget.textContent = 'Start Live'
+        return
       }
-    },
-    {
-      id:      'block-ip',
-      label:   'IP 차단',
-      icon:    '✕',
-      group:   'investigate',
-      disabled: e => !e.src_ip,
-      handler: (event) => {
-        alert(`차단 요청: ${event.src_ip}`)
-      }
-    }
-  ],
-  detail: {
-    layout:     'right',
-    width:      480,
-    tabs:       ['parsedFields', 'rawLog', 'timeline'],
-    defaultTab: 'parsedFields',
-  },
-  live: false,
-})
-
-// ── Event listeners ────────────────────────────────────────────────────────
-viewer.on('event:selected', ({ event }) => {
-  document.title = `[${event.severity.toUpperCase()}] ${event.rule_name} — TraceScope`
-})
-
-viewer.on('timeline:item-click', ({ item }) => {
-  console.log('[TraceScope] Timeline item clicked:', item)
-})
-
-// ── Demo controls ──────────────────────────────────────────────────────────
-let maskingEnabled = true
-document.getElementById('btn-masking').addEventListener('click', (e) => {
-  maskingEnabled = !maskingEnabled
-  viewer.emit('masking:toggle', { enabled: maskingEnabled })
-  viewer.refresh()
-  e.currentTarget.textContent = maskingEnabled ? '👁 마스킹 ON' : '👁 마스킹 OFF'
-  e.currentTarget.style.color = maskingEnabled ? '' : '#52c41a'
-  document.querySelector('.plugin-tag[title*="마스킹"]').classList.toggle('active', maskingEnabled)
-})
-
-let currentTheme   = 'dark'
-let currentDensity = 'normal'
-let liveRunning    = false
-let liveTimer      = null
-
-document.getElementById('btn-theme').addEventListener('click', (e) => {
-  currentTheme = currentTheme === 'dark' ? 'light' : 'dark'
-  document.querySelector('#viewer .ts-root').dataset.tsTheme = currentTheme
-  e.currentTarget.textContent = currentTheme === 'dark' ? '☀ Light' : '🌙 Dark'
-})
-
-document.getElementById('btn-density').addEventListener('click', (e) => {
-  const densities = ['normal','compact','comfortable']
-  const labels    = ['≡ Compact', '≡ Normal', '≡ Comfy']
-  const idx = densities.indexOf(currentDensity)
-  currentDensity  = densities[(idx + 1) % densities.length]
-  document.querySelector('#viewer .ts-root').dataset.tsDensity = currentDensity
-  e.currentTarget.textContent = labels[(idx + 1) % labels.length]
-})
-
-document.getElementById('btn-add100').addEventListener('click', () => {
-  const newEvents = Array.from({ length: 100 }, () => generateEvent())
-  // Add directly to the static adapter via internal access
-  const ds = viewer._dataSource
-  ds._original.unshift(...newEvents)
-  ds._filtered.unshift(...newEvents)
-  viewer.refresh()
-  document.getElementById('demo-info').textContent =
-    `6 Plugins Active — 총 ${ds._filtered.length.toLocaleString()}건`
-})
-
-// ── Worker toggle ─────────────────────────────────────────────────────────
-let workerEnabled = false
-document.getElementById('btn-worker').addEventListener('click', async (e) => {
-  workerEnabled = !workerEnabled
-  e.currentTarget.textContent = `⚙ Worker: ${workerEnabled ? 'ON' : 'OFF'}`
-  e.currentTarget.style.color = workerEnabled ? '#52c41a' : ''
-
-  // Rebuild data source with or without Worker
-  const baseAdapter = new StaticArrayAdapter(viewer._dataSource._original || events)
-  if (workerEnabled) {
-    const bridge = new WorkerBridge(baseAdapter, { maxTotalRows: 100000 })
-    viewer.setDataSource(bridge)
-    document.getElementById('demo-info').textContent = '⚙ Worker mode: filter/sort off main thread'
-  } else {
-    viewer.setDataSource(baseAdapter)
-    document.getElementById('demo-info').textContent = 'Main thread mode'
-  }
-})
-
-document.getElementById('btn-live').addEventListener('click', (e) => {
-  if (liveRunning) {
-    clearInterval(liveTimer)
-    liveRunning = false
-    e.currentTarget.textContent = '▶ Live 시작'
-  } else {
-    liveRunning = true
-    e.currentTarget.textContent = '⏹ Live 정지'
-    liveTimer = setInterval(() => {
-      const batch   = Array.from({ length: Math.floor(Math.random() * 5) + 1 }, () => generateEvent())
-      const ds = viewer._dataSource
-      ds._original.unshift(...batch)
-      ds._filtered.unshift(...batch)
-      viewer._grid.prependRows(batch)
-      viewer.emit('live:new-events', { events: batch, count: batch.length })
-      document.getElementById('demo-info').textContent =
-        `6 Plugins Active — 총 ${ds._filtered.length.toLocaleString()}건 (Live 수신 중)`
-    }, 1000)
-  }
-})
-</script>
+      event.currentTarget.textContent = 'Stop Live'
+      liveTimer = setInterval(() => {
+        const batch = Array.from({ length: Math.floor(Math.random() * 5) + 1 }, () => generateEvent())
+        viewer._dataSource.pushLiveEvents?.(batch)
+        viewer._grid.prependRows(batch)
+        info.textContent = `${viewer._dataSource.getTotalCount().toLocaleString()} security events`
+      }, 1200)
+    })
+  </script>
 </body>
 </html>

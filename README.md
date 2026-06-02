@@ -443,11 +443,8 @@ The demo is built into `docs/` with:
 npm run build:demo
 ```
 
-`vite.demo.config.js` sets:
-
-```js
-base: '/trace-scope/'
-```
+`npm run build:demo` copies `index.html` and the built `dist/` files into `docs/`.
+Run `npm run build` first when building the demo manually.
 
 The Pages workflow deploys `docs/` to:
 
