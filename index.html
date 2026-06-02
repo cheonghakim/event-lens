@@ -199,7 +199,6 @@
       dataSource: events,
       theme: 'dark',
       density: 'normal',
-      worker: true,
       plugins: [
         ExportPlugin,
         LocalGeoIpPlugin.configure({ ipFields: ['dst_ip'], lookup: ip => MOCK_GEO[ip] || null }),

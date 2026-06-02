@@ -131,10 +131,10 @@ export class WorkerBridge {
   }
 
   async _initWorkerData() {
+    let data = []
     try {
-      // Load all data from adapter first
       const result = await this._adapter.getRows({ start: 0, end: Infinity })
-      const data   = Array.isArray(result) ? result : (result.rows || [])
+      data = Array.isArray(result) ? result : (result.rows || [])
 
       await this._send('init', {
         data,
@@ -145,10 +145,12 @@ export class WorkerBridge {
       this._useWorker  = true
       this._ready      = true
     } catch (e) {
-      console.warn('[WorkerBridge] Worker data init failed, falling back:', e.message)
+      console.warn('[EventLens] Worker data init failed, falling back to main thread:', e.message)
       this._worker?.terminate()
-      this._worker    = null
-      this._useWorker = false
+      this._worker     = null
+      this._useWorker  = false
+      this._totalCount = data.length  // fallback: count already fetched from adapter
+      this._ready      = true
     }
   }
 
