@@ -3,7 +3,7 @@ import { el } from '../utils/dom.js'
 export class NewEventBadge {
   constructor(container, onClickCallback) {
     this._count = 0
-    this._el    = el('button', 'ts-new-event-badge', {
+    this._el    = el('button', 'el-new-event-badge', {
       role:         'status',
       'aria-live':  'polite',
       textContent:  '',

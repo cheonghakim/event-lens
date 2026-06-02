@@ -53,7 +53,7 @@ export class ColumnManager {
   onChange(fn) { this._changeListeners.push(fn) }
 
   mountResizeHandles(headerEl, onWidthChange) {
-    const handles = headerEl.querySelectorAll('.ts-col-resize-handle')
+    const handles = headerEl.querySelectorAll('.el-col-resize-handle')
     const cols    = this.columns
 
     handles.forEach((handle, i) => {
@@ -69,7 +69,7 @@ export class ColumnManager {
         startX = e.clientX
         startW = col.width || 120
 
-        handle.classList.add('ts-resizing')
+        handle.classList.add('el-resizing')
 
         const onMouseMove = (e) => {
           const delta = e.clientX - startX
@@ -77,7 +77,7 @@ export class ColumnManager {
           onWidthChange?.(col, i)
         }
         const onMouseUp = () => {
-          handle.classList.remove('ts-resizing')
+          handle.classList.remove('el-resizing')
           document.removeEventListener('mousemove', onMouseMove)
           document.removeEventListener('mouseup', onMouseUp)
         }
@@ -90,7 +90,7 @@ export class ColumnManager {
   }
 
   mountDragHandles(headerEl) {
-    const cells = headerEl.querySelectorAll('.ts-header-cell[data-col-id]')
+    const cells = headerEl.querySelectorAll('.el-header-cell[data-col-id]')
     let draggingId = null
 
     cells.forEach(cell => {
@@ -98,33 +98,33 @@ export class ColumnManager {
 
       this._cleanups.push(on(cell, 'dragstart', (e) => {
         draggingId = colId
-        cell.classList.add('ts-dragging')
+        cell.classList.add('el-dragging')
         e.dataTransfer.effectAllowed = 'move'
         e.dataTransfer.setData('text/plain', colId)
       }))
 
       this._cleanups.push(on(cell, 'dragend', () => {
         draggingId = null
-        cell.classList.remove('ts-dragging')
-        headerEl.querySelectorAll('.ts-drag-over').forEach(el => el.classList.remove('ts-drag-over'))
+        cell.classList.remove('el-dragging')
+        headerEl.querySelectorAll('.el-drag-over').forEach(el => el.classList.remove('el-drag-over'))
       }))
 
       this._cleanups.push(on(cell, 'dragover', (e) => {
         if (!draggingId || draggingId === colId) return
         e.preventDefault()
         e.dataTransfer.dropEffect = 'move'
-        headerEl.querySelectorAll('.ts-drag-over').forEach(el => el.classList.remove('ts-drag-over'))
-        cell.classList.add('ts-drag-over')
+        headerEl.querySelectorAll('.el-drag-over').forEach(el => el.classList.remove('el-drag-over'))
+        cell.classList.add('el-drag-over')
       }))
 
       this._cleanups.push(on(cell, 'dragleave', () => {
-        cell.classList.remove('ts-drag-over')
+        cell.classList.remove('el-drag-over')
       }))
 
       this._cleanups.push(on(cell, 'drop', (e) => {
         e.preventDefault()
         const fromId = e.dataTransfer.getData('text/plain')
-        cell.classList.remove('ts-drag-over')
+        cell.classList.remove('el-drag-over')
         if (fromId && fromId !== colId) {
           this.moveColumn(fromId, colId)
         }

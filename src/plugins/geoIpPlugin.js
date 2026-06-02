@@ -2,11 +2,11 @@
  * GeoIpPlugin — src_ip / dst_ip → 국가·도시 표시
  *
  * 사용:
- *   import { GeoIpPlugin } from 'trace-scope'
- *   TraceScope.use(GeoIpPlugin)
+ *   import { GeoIpPlugin } from 'event-lens'
+ *   EventLens.use(GeoIpPlugin)
  *
  *   // 커스텀 API 엔드포인트
- *   TraceScope.use(GeoIpPlugin.configure({ apiBase: 'https://my-geoip/json/' }))
+ *   EventLens.use(GeoIpPlugin.configure({ apiBase: 'https://my-geoip/json/' }))
  *
  * 기본 API: http://ip-api.com/json/{ip}?fields=country,city,countryCode
  * (무료, 상업 서버에서는 Pro 플랜 사용 또는 자체 GeoIP DB 권장)
@@ -61,7 +61,7 @@ function createPlugin(options = {}) {
 
   function renderCell(ip) {
     const wrap = document.createElement('span')
-    wrap.className = 'ts-cell-text ts-geoip-cell'
+    wrap.className = 'el-cell-text el-geoip-cell'
     wrap.textContent = ip || '-'
     wrap.title = ip || ''
 
@@ -73,7 +73,7 @@ function createPlugin(options = {}) {
         wrap.title = `${ip}\n${label}`
         // Append subtle geo badge
         const badge = document.createElement('span')
-        badge.className = 'ts-geoip-badge'
+        badge.className = 'el-geoip-badge'
         badge.textContent = flag || geo.countryCode || ''
         badge.title = label
         wrap.appendChild(badge)

@@ -16,10 +16,10 @@ import { el }               from '../utils/dom.js'
 // Static plugin registry (class-level)
 const _staticPlugins = []
 
-export class TraceScope {
+export class EventLens {
   static use(plugin) {
     _staticPlugins.push(plugin)
-    return TraceScope
+    return EventLens
   }
 
   constructor(options) {
@@ -27,7 +27,7 @@ export class TraceScope {
     this._bus        = new EventBus()
     this._plugins    = new PluginRegistry(this)
     this._stateMgr   = this._options.storageKey !== false
-      ? new StateManager({ storageKey: this._options.storageKey || 'trace-scope-state' })
+      ? new StateManager({ storageKey: this._options.storageKey || 'event-lens-state' })
       : null
 
     const rawAdapter = createDataSource(this._options.dataSource)
@@ -49,7 +49,7 @@ export class TraceScope {
       ? document.querySelector(this._options.container)
       : this._options.container
 
-    if (!this._container) throw new Error('[TraceScope] container element not found')
+    if (!this._container) throw new Error('[EventLens] container element not found')
 
     // Install static plugins first, then instance plugins
     for (const p of _staticPlugins)          this._plugins.register(p)
@@ -179,13 +179,13 @@ export class TraceScope {
     const opts = this._options
 
     // Root element
-    this._rootEl = el('div', 'ts-root')
-    this._rootEl.dataset.tsTheme   = opts.theme
-    this._rootEl.dataset.tsDensity = opts.density
+    this._rootEl = el('div', 'el-root')
+    this._rootEl.dataset.elTheme   = opts.theme
+    this._rootEl.dataset.elDensity = opts.density
     this._container.appendChild(this._rootEl)
 
     // Toolbar (FilterBar + LiveStatusBar)
-    const toolbar = el('div', 'ts-toolbar')
+    const toolbar = el('div', 'el-toolbar')
     this._rootEl.appendChild(toolbar)
 
     this._filterBar = new FilterBar(this)
@@ -197,11 +197,11 @@ export class TraceScope {
     }
 
     // Content area
-    const content = el('div', 'ts-content')
+    const content = el('div', 'el-content')
     this._rootEl.appendChild(content)
 
     // Grid area
-    const gridArea = el('div', 'ts-grid-area')
+    const gridArea = el('div', 'el-grid-area')
     content.appendChild(gridArea)
 
     this._grid = new EventGrid(this)
@@ -209,7 +209,7 @@ export class TraceScope {
 
     // Detail panel
     if (opts.detail.enabled) {
-      const detailArea = el('div', 'ts-detail-area')
+      const detailArea = el('div', 'el-detail-area')
       if (opts.detail.layout === 'right') {
         detailArea.style.width = `${opts.detail.width}px`
       }

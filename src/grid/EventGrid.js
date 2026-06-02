@@ -66,10 +66,10 @@ export class EventGrid {
   }
 
   mount(container) {
-    this._el = el('div', 'ts-grid', { role: 'grid', 'aria-label': '보안 이벤트' })
+    this._el = el('div', 'el-grid', { role: 'grid', 'aria-label': '보안 이벤트' })
 
     // ── Header wrapper (clipped, header translates on h-scroll)
-    this._headerWrap = el('div', 'ts-grid-header-wrap')
+    this._headerWrap = el('div', 'el-grid-header-wrap')
     this._header     = new HeaderRenderer(this._cm)
     const headerEl   = this._header.render(
       (sort) => this._bus.emit('sort:changed', sort),
@@ -80,13 +80,13 @@ export class EventGrid {
     this._updateHeaderMinWidth()
 
     // ── Scroll body (virtual scroll + horizontal)
-    this._scrollBody = el('div', 'ts-grid-body', {
+    this._scrollBody = el('div', 'el-grid-body', {
       role:     'rowgroup',
       tabindex: '0',
       'aria-label': '이벤트 목록',
     })
 
-    this._spacer   = el('div', 'ts-grid-spacer')
+    this._spacer   = el('div', 'el-grid-spacer')
     this._scrollBody.appendChild(this._spacer)
     this._el.appendChild(this._scrollBody)
 
@@ -143,13 +143,13 @@ export class EventGrid {
     } else {
       const domWrap = this._rowsWrap || this._spacer
       this._cleanups.push(on(domWrap, 'click', (e) => {
-        const rowEl = e.target.closest('.ts-row')
+        const rowEl = e.target.closest('.el-row')
         if (rowEl) this._onRowClick(rowEl)
       }))
       this._cleanups.push(on(domWrap, 'keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
-          const rowEl = e.target.closest('.ts-row')
+          const rowEl = e.target.closest('.el-row')
           if (rowEl) this._onRowClick(rowEl)
         }
       }))
@@ -174,11 +174,11 @@ export class EventGrid {
       this._bus.off('live:new-events', onLive)
     })
 
-    // ── Density observer: update rowHeight when data-ts-density changes
+    // ── Density observer: update rowHeight when data-el-density changes
     const rootEl = this._core._rootEl
     if (rootEl && typeof MutationObserver !== 'undefined') {
       this._densityObserver = new MutationObserver(() => {
-        const density = rootEl.dataset.tsDensity || 'normal'
+        const density = rootEl.dataset.elDensity || 'normal'
         const h = DENSITY_ROW_HEIGHTS[density] ?? DENSITY_ROW_HEIGHTS.normal
         if (h !== this._vsEngine.rowHeight) {
           this._vsEngine.setRowHeight(h)
@@ -186,7 +186,7 @@ export class EventGrid {
           this.refresh()
         }
       })
-      this._densityObserver.observe(rootEl, { attributes: true, attributeFilter: ['data-ts-density'] })
+      this._densityObserver.observe(rootEl, { attributes: true, attributeFilter: ['data-el-density'] })
       this._cleanups.push(() => this._densityObserver.disconnect())
     }
   }
@@ -308,7 +308,7 @@ export class EventGrid {
       this._rows = rows || []
       this._renderRows(this._rows, startIdx, offsetTop ?? startIdx * this._vsEngine.rowHeight)
     } catch (e) {
-      console.error('[TraceScope] Error fetching rows:', e)
+      console.error('[EventLens] Error fetching rows:', e)
       this._bus.emit('data:error', { error: e })
     }
   }
@@ -358,7 +358,7 @@ export class EventGrid {
         frag.appendChild(groupEl)
         this._activeNodes.push(groupEl)
       } else {
-        const rowEl = this._backend._rowPool?.acquire() || el('div', 'ts-row', { tabindex: '0', role: 'row' })
+        const rowEl = this._backend._rowPool?.acquire() || el('div', 'el-row', { tabindex: '0', role: 'row' })
         this._rowRenderer.fillRow(rowEl, item.event, rowIdx++)
         this._selection.onRowRendered(rowEl, item.event.id)
         frag.appendChild(rowEl)
@@ -371,19 +371,19 @@ export class EventGrid {
   }
 
   _renderGroupHeader(item) {
-    const groupEl = el('div', 'ts-group-header')
+    const groupEl = el('div', 'el-group-header')
     groupEl.dataset.groupKey = item.key
     groupEl.setAttribute('role', 'rowgroup')
     groupEl.setAttribute('aria-expanded', String(!item.collapsed))
 
-    const chevron = el('span', 'ts-group-chevron')
+    const chevron = el('span', 'el-group-chevron')
     chevron.textContent = item.collapsed ? '▶' : '▼'
     chevron.setAttribute('aria-hidden', 'true')
 
-    const label = el('span', 'ts-group-label')
+    const label = el('span', 'el-group-label')
     label.textContent = `${this._groupEngine.field}: ${item.label}`
 
-    const count = el('span', 'ts-group-count')
+    const count = el('span', 'el-group-count')
     count.textContent = `(${item.count})`
 
     groupEl.appendChild(chevron)

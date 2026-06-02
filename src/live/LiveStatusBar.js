@@ -12,13 +12,13 @@ export class LiveStatusBar {
   }
 
   mount(container) {
-    this._el = el('div', 'ts-live-status-bar', { role: 'status', 'aria-live': 'polite' })
+    this._el = el('div', 'el-live-status-bar', { role: 'status', 'aria-live': 'polite' })
 
-    this._dotEl  = el('span', 'ts-live-dot ts-live-dot--connecting', { title: '연결 중' })
-    this._textEl = el('span', 'ts-live-text', { textContent: '연결 중...' })
-    this._countEl= el('span', 'ts-live-count', { textContent: '' })
+    this._dotEl  = el('span', 'el-live-dot el-live-dot--connecting', { title: '연결 중' })
+    this._textEl = el('span', 'el-live-text', { textContent: '연결 중...' })
+    this._countEl= el('span', 'el-live-count', { textContent: '' })
 
-    this._pauseBtn = el('button', 'ts-live-pause-btn', {
+    this._pauseBtn = el('button', 'el-live-pause-btn', {
       textContent:  '⏸ 일시정지',
       type:         'button',
       'aria-label': 'Live 일시정지',
@@ -42,20 +42,20 @@ export class LiveStatusBar {
   }
 
   _setConnected() {
-    this._dotEl.className  = 'ts-live-dot ts-live-dot--connected'
+    this._dotEl.className  = 'el-live-dot el-live-dot--connected'
     this._textEl.textContent = 'Live 연결됨'
     this._dotEl.title      = '연결됨'
   }
 
   _setDisconnected() {
-    this._dotEl.className  = 'ts-live-dot ts-live-dot--disconnected'
+    this._dotEl.className  = 'el-live-dot el-live-dot--disconnected'
     this._textEl.textContent = '연결 끊김'
     this._dotEl.title      = '연결 끊김'
   }
 
   _setPaused() {
     this._paused           = true
-    this._dotEl.className  = 'ts-live-dot ts-live-dot--paused'
+    this._dotEl.className  = 'el-live-dot el-live-dot--paused'
     this._textEl.textContent = '일시정지'
     this._pauseBtn.textContent = '▶ 재개'
     this._pauseBtn.setAttribute('aria-label', 'Live 재개')
@@ -63,7 +63,7 @@ export class LiveStatusBar {
 
   _setResumed() {
     this._paused           = false
-    this._dotEl.className  = 'ts-live-dot ts-live-dot--connected'
+    this._dotEl.className  = 'el-live-dot el-live-dot--connected'
     this._textEl.textContent = 'Live 연결됨'
     this._pauseBtn.textContent = '⏸ 일시정지'
     this._pauseBtn.setAttribute('aria-label', 'Live 일시정지')

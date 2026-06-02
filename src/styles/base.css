@@ -1,23 +1,23 @@
-/* TraceScope — base reset */
-.ts-root *,
-.ts-root *::before,
-.ts-root *::after {
+/* EventLens — base reset */
+.el-root *,
+.el-root *::before,
+.el-root *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-.ts-root {
-  font-family: var(--ts-font-family);
-  font-size:   var(--ts-font-size);
-  line-height: var(--ts-line-height);
-  color:       var(--ts-text);
-  background:  var(--ts-bg);
+.el-root {
+  font-family: var(--el-font-family);
+  font-size:   var(--el-font-size);
+  line-height: var(--el-line-height);
+  color:       var(--el-text);
+  background:  var(--el-bg);
   position:    relative;
   overflow:    hidden;
 }
 
-.ts-root button {
+.el-root button {
   font-family: inherit;
   font-size:   inherit;
   cursor:      pointer;
@@ -27,27 +27,27 @@
   padding:     0;
 }
 
-.ts-root button:focus-visible {
-  outline: 2px solid var(--ts-accent);
+.el-root button:focus-visible {
+  outline: 2px solid var(--el-accent);
   outline-offset: 2px;
 }
 
-.ts-root input {
+.el-root input {
   font-family: inherit;
   font-size:   inherit;
   outline:     none;
 }
 
-.ts-root input:focus-visible {
-  outline: 2px solid var(--ts-accent);
+.el-root input:focus-visible {
+  outline: 2px solid var(--el-accent);
 }
 
-.ts-root a {
-  color: var(--ts-accent);
+.el-root a {
+  color: var(--el-accent);
   text-decoration: none;
 }
 
-.ts-sr-only {
+.el-sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -60,7 +60,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ts-root * {
+  .el-root * {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }

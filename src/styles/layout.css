@@ -1,6 +1,6 @@
-/* TraceScope — layout */
+/* EventLens — layout */
 
-.ts-root {
+.el-root {
   display:        flex;
   flex-direction: column;
   width:          100%;
@@ -8,27 +8,27 @@
 }
 
 /* ── Toolbar ── */
-.ts-toolbar {
+.el-toolbar {
   flex:          0 0 auto;
   display:       flex;
   align-items:   center;
   gap:           8px;
   padding:       6px 12px;
-  border-bottom: 1px solid var(--ts-border);
-  background:    var(--ts-header-bg);
+  border-bottom: 1px solid var(--el-border);
+  background:    var(--el-header-bg);
   flex-wrap:     wrap;
   min-height:    44px;
 }
 
 /* ── Content ── */
-.ts-content {
+.el-content {
   flex:     1 1 0;
   display:  flex;
   overflow: hidden;
 }
 
 /* ── Grid area ── */
-.ts-grid-area {
+.el-grid-area {
   flex:     1 1 0;
   display:  flex;
   overflow: hidden;
@@ -36,16 +36,16 @@
 }
 
 /* ── Detail area ── */
-.ts-detail-area {
+.el-detail-area {
   flex:          0 0 auto;
-  border-left:   1px solid var(--ts-border);
+  border-left:   1px solid var(--el-border);
   overflow:      hidden;
   display:       flex;
   flex-direction: column;
 }
 
 /* ── Grid ── */
-.ts-grid {
+.el-grid {
   display:        flex;
   flex-direction: column;
   width:          100%;
@@ -55,24 +55,24 @@
 }
 
 /* Header wrapper: clips header overflow, header translates for h-scroll */
-.ts-grid-header-wrap {
+.el-grid-header-wrap {
   flex:        0 0 auto;
   overflow:    hidden;
   position:    relative;
   z-index:     2;
-  border-bottom: 1px solid var(--ts-border);
+  border-bottom: 1px solid var(--el-border);
 }
 
 /* Header: no overflow, translates via JS on h-scroll */
-.ts-grid-header {
+.el-grid-header {
   display:      flex;
-  height:       var(--ts-header-height);
-  background:   var(--ts-header-bg);
+  height:       var(--el-header-height);
+  background:   var(--el-header-bg);
   user-select:  none;
   will-change:  transform;
 }
 
-.ts-grid-body {
+.el-grid-body {
   flex:            1 1 0;
   overflow-y:      scroll;
   overflow-x:      auto;
@@ -80,11 +80,11 @@
   scroll-behavior: auto;
 }
 
-.ts-grid-spacer {
+.el-grid-spacer {
   position: relative;
 }
 
-.ts-rows-container {
+.el-rows-container {
   position:    absolute;
   left:        0;
   top:         0;
@@ -92,30 +92,30 @@
 }
 
 /* ── Detail panel ── */
-.ts-detail-panel {
+.el-detail-panel {
   display:        flex;
   flex-direction: column;
   width:          100%;
   height:         100%;
   overflow:       hidden;
-  background:     var(--ts-panel-bg);
+  background:     var(--el-panel-bg);
 }
 
-.ts-detail-panel--right {
+.el-detail-panel--right {
   /* Width set inline by JS */
 }
 
-.ts-detail-header {
+.el-detail-header {
   display:       flex;
   align-items:   center;
   gap:           8px;
   padding:       8px 12px;
-  border-bottom: 1px solid var(--ts-border);
+  border-bottom: 1px solid var(--el-border);
   min-height:    40px;
   flex:          0 0 auto;
 }
 
-.ts-detail-title {
+.el-detail-title {
   flex:        1;
   font-weight: 600;
   font-size:   13px;
@@ -127,30 +127,30 @@
   gap:         6px;
 }
 
-.ts-detail-tabs {
+.el-detail-tabs {
   display:     flex;
   flex:        0 0 auto;
   gap:         4px;
-  border-bottom: 1px solid var(--ts-border);
-  background:  var(--ts-header-bg);
+  border-bottom: 1px solid var(--el-border);
+  background:  var(--el-header-bg);
   padding:     0 12px;
 }
 
-.ts-detail-content {
+.el-detail-content {
   flex:       1 1 0;
   overflow-y: auto;
   overflow-x: hidden;
   position:   relative;
 }
 
-.ts-action-bar {
+.el-action-bar {
   flex:          0 0 auto;
   display:       flex;
   align-items:   center;
   gap:           4px;
   padding:       8px 12px;
-  border-top:    1px solid var(--ts-border);
+  border-top:    1px solid var(--el-border);
   flex-wrap:     wrap;
-  background:    var(--ts-header-bg);
+  background:    var(--el-header-bg);
   min-height:    48px;
 }

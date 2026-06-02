@@ -10,7 +10,7 @@
  */
 export class ChunkCache {
   constructor(options = {}) {
-    this._dbName    = options.dbName    || 'trace-scope-cache'
+    this._dbName    = options.dbName    || 'event-lens-cache'
     this._storeName = options.storeName || 'chunks'
     this._version   = options.version   || 1
     this._defaultTtl = options.ttl      || 5 * 60 * 1000  // 5 minutes
@@ -169,7 +169,7 @@ export class CachedServerRangeAdapter {
   constructor(serverAdapter, cacheOptions = {}) {
     this._server = serverAdapter
     this._cache  = new ChunkCache({
-      dbName:  cacheOptions.dbName || 'trace-scope-server-cache',
+      dbName:  cacheOptions.dbName || 'event-lens-server-cache',
       ttl:     cacheOptions.ttl   || 2 * 60 * 1000,  // 2 minutes
     })
   }

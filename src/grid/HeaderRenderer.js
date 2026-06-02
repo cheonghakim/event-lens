@@ -12,7 +12,7 @@ export class HeaderRenderer {
   }
 
   render(onSort, onColumnChange) {
-    this._el = el('div', 'ts-grid-header', { role: 'row', 'aria-label': '컬럼 헤더' })
+    this._el = el('div', 'el-grid-header', { role: 'row', 'aria-label': '컬럼 헤더' })
     this._onColumnChange = onColumnChange
 
     this._buildCells(onSort)
@@ -24,7 +24,7 @@ export class HeaderRenderer {
   updateAll(onSort) {
     if (!this._el) return
     // Remove all cells except column picker cell
-    const picker = this._el.querySelector('.ts-col-picker-cell')
+    const picker = this._el.querySelector('.el-col-picker-cell')
     while (this._el.firstChild) this._el.removeChild(this._el.firstChild)
     this._buildCells(onSort)
     if (picker) this._el.appendChild(picker)
@@ -50,7 +50,7 @@ export class HeaderRenderer {
 
   _buildCells(onSort) {
     for (const col of this._cm.columns) {
-      const cell = el('div', 'ts-header-cell', {
+      const cell = el('div', 'el-header-cell', {
         'data-col-id': col.id,
         draggable:     'true',
         style: `width:${col.width}px;min-width:${col.minWidth || 60}px`,
@@ -60,21 +60,21 @@ export class HeaderRenderer {
       })
 
       // Drag handle
-      const dragHandle = el('div', 'ts-header-drag-handle', { title: '드래그하여 컬럼 이동' })
+      const dragHandle = el('div', 'el-header-drag-handle', { title: '드래그하여 컬럼 이동' })
       cell.appendChild(dragHandle)
 
       // Label
-      const labelSpan = el('span', 'ts-header-label', { textContent: col.label })
+      const labelSpan = el('span', 'el-header-label', { textContent: col.label })
       cell.appendChild(labelSpan)
 
       // Sort icon
       if (col.sortable !== false) {
-        const sortIcon = el('span', 'ts-sort-icon')
+        const sortIcon = el('span', 'el-sort-icon')
         cell.appendChild(sortIcon)
-        cell.classList.add('ts-sortable')
+        cell.classList.add('el-sortable')
 
         this._cleanups.push(on(cell, 'click', (e) => {
-          if (e.target.closest('.ts-header-drag-handle')) return
+          if (e.target.closest('.el-header-drag-handle')) return
           if (this._sortCol === col.id) {
             this._sortDir = this._sortDir === 'asc' ? 'desc' : 'asc'
           } else {
@@ -88,7 +88,7 @@ export class HeaderRenderer {
 
       // Resize handle
       if (col.resizable !== false) {
-        const handle = el('div', 'ts-col-resize-handle', { title: '드래그하여 너비 조정' })
+        const handle = el('div', 'el-col-resize-handle', { title: '드래그하여 너비 조정' })
         cell.appendChild(handle)
       }
 
@@ -100,14 +100,14 @@ export class HeaderRenderer {
   }
 
   _appendColumnPicker() {
-    const cell = el('div', 'ts-col-picker-cell')
-    const btn  = el('button', 'ts-col-picker-btn', {
+    const cell = el('div', 'el-col-picker-cell')
+    const btn  = el('button', 'el-col-picker-btn', {
       type:         'button',
       title:        '컬럼 순서 변경 / 표시·숨기기',
       'aria-label': '컬럼 설정',
       'aria-haspopup': 'true',
     })
-    btn.innerHTML = `<span class="ts-col-picker-btn-icon" aria-hidden="true">≡</span><span>컬럼</span>`
+    btn.innerHTML = `<span class="el-col-picker-btn-icon" aria-hidden="true">≡</span><span>컬럼</span>`
 
     this._cleanups.push(on(btn, 'click', (e) => {
       e.stopPropagation()
@@ -131,18 +131,18 @@ export class HeaderRenderer {
     this._closePicker()
     this._pickerOpen = true
 
-    const dropdown = el('div', 'ts-col-picker-dropdown')
-    const header   = el('div', 'ts-col-picker-header')
-    header.innerHTML = '<span>컬럼 설정</span><span class="ts-col-picker-hint">헤더 드래그로 순서 변경</span>'
+    const dropdown = el('div', 'el-col-picker-dropdown')
+    const header   = el('div', 'el-col-picker-header')
+    header.innerHTML = '<span>컬럼 설정</span><span class="el-col-picker-hint">헤더 드래그로 순서 변경</span>'
     dropdown.appendChild(header)
 
     for (const col of this._cm.allColumns) {
-      const item = el('div', 'ts-col-picker-item')
-      const checkbox = el('input', '', { type: 'checkbox', id: `ts-col-${col.id}` })
+      const item = el('div', 'el-col-picker-item')
+      const checkbox = el('input', '', { type: 'checkbox', id: `el-col-${col.id}` })
       checkbox.checked = this._cm.isVisible(col.id)
       const label = el('label', '', {
         textContent: col.label,
-        for: `ts-col-${col.id}`,
+        for: `el-col-${col.id}`,
         style: 'cursor:pointer',
       })
       on(checkbox, 'change', () => {
@@ -154,7 +154,7 @@ export class HeaderRenderer {
     }
 
     // Position below the header
-    const gridEl = this._el.closest('.ts-grid')
+    const gridEl = this._el.closest('.el-grid')
     if (gridEl) {
       gridEl.style.position = 'relative'
       gridEl.appendChild(dropdown)
@@ -182,17 +182,17 @@ export class HeaderRenderer {
 
   _updateSortIcons() {
     if (!this._el) return
-    this._el.querySelectorAll('.ts-header-cell').forEach(cell => {
-      const icon  = cell.querySelector('.ts-sort-icon')
+    this._el.querySelectorAll('.el-header-cell').forEach(cell => {
+      const icon  = cell.querySelector('.el-sort-icon')
       if (!icon) return
       const colId = cell.dataset.colId
       if (colId === this._sortCol) {
         icon.textContent = this._sortDir === 'asc' ? '↑' : '↓'
-        cell.classList.add('ts-sorted')
+        cell.classList.add('el-sorted')
         cell.setAttribute('aria-sort', this._sortDir === 'asc' ? 'ascending' : 'descending')
       } else {
         icon.textContent = ''
-        cell.classList.remove('ts-sorted')
+        cell.classList.remove('el-sorted')
         cell.setAttribute('aria-sort', 'none')
       }
     })

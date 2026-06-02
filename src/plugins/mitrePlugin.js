@@ -2,8 +2,8 @@
  * MitrePlugin — ATT&CK technique 태깅
  *
  * 사용:
- *   import { MitrePlugin } from 'trace-scope'
- *   TraceScope.use(MitrePlugin.configure({
+ *   import { MitrePlugin } from 'event-lens'
+ *   EventLens.use(MitrePlugin.configure({
  *     // rule_id → technique(s) 매핑
  *     ruleMap: {
  *       'R1001': [{ id: 'T1078', name: 'Valid Accounts', tactic: 'Initial Access' }],
@@ -32,7 +32,7 @@ const TACTIC_COLORS = {
 function techniqueTag(tech) {
   const el  = document.createElement('span')
   const col = TACTIC_COLORS[tech.tactic] || '#5c5c5c'
-  el.className = 'ts-mitre-tag'
+  el.className = 'el-mitre-tag'
   el.style.borderColor = col
   el.style.color = col
   el.textContent = tech.id
@@ -72,10 +72,10 @@ function createPlugin(options = {}) {
       // Render ATT&CK tags in the rule_name column
       ctx.registerFieldRenderer('rule_name', (value, event) => {
         const wrap = document.createElement('span')
-        wrap.className = 'ts-mitre-cell'
+        wrap.className = 'el-mitre-cell'
 
         const text = document.createElement('span')
-        text.className = 'ts-cell-text'
+        text.className = 'el-cell-text'
         text.textContent = value || '-'
         wrap.appendChild(text)
 

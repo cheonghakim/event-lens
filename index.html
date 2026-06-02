@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TraceScope Demo</title>
+  <title>EventLens Demo</title>
   <link rel="icon" href="data:," />
-  <link rel="stylesheet" href="./dist/trace-scope.css" />
+  <link rel="stylesheet" href="./dist/event-lens.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; height: 100%; }
@@ -68,7 +68,7 @@
 <body>
   <div class="demo-shell">
     <div class="demo-bar">
-      <div class="demo-title">TraceScope</div>
+      <div class="demo-title">EventLens</div>
       <div class="demo-sep">|</div>
       <button class="demo-button" id="btn-theme">Light</button>
       <button class="demo-button" id="btn-density">Compact</button>
@@ -81,9 +81,9 @@
   </div>
 
   <script type="module">
-    import { TraceScope, ExportPlugin } from './dist/index.mjs'
+    import { EventLens, ExportPlugin } from './dist/index.mjs'
 
-    TraceScope.use(ExportPlugin)
+    EventLens.use(ExportPlugin)
 
     const severities = ['critical', 'high', 'medium', 'low', 'info']
     const actions = ['blocked', 'denied', 'allowed', 'dropped', 'reset']
@@ -167,7 +167,7 @@
     const events = Array.from({ length: 5000 }, () => generateEvent())
       .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
 
-    const viewer = new TraceScope({
+    const viewer = new EventLens({
       container: '#viewer',
       dataSource: events,
       theme: 'dark',
@@ -186,7 +186,7 @@
         { id: 'risk_score', field: 'risk_score', label: 'Risk', width: 80 },
       ],
       highlightRules: [
-        { priority: 100, when: event => event.severity === 'critical', className: 'ts-row--highlight-critical' },
+        { priority: 100, when: event => event.severity === 'critical', className: 'el-row--highlight-critical' },
       ],
       actions: [
         {
@@ -203,7 +203,7 @@
       },
     })
 
-    const root = () => document.querySelector('#viewer .ts-root')
+    const root = () => document.querySelector('#viewer .el-root')
     const info = document.getElementById('demo-info')
     let currentTheme = 'dark'
     let currentDensity = 'normal'
@@ -211,14 +211,14 @@
 
     document.getElementById('btn-theme').addEventListener('click', event => {
       currentTheme = currentTheme === 'dark' ? 'light' : 'dark'
-      root().dataset.tsTheme = currentTheme
+      root().dataset.elTheme = currentTheme
       event.currentTarget.textContent = currentTheme === 'dark' ? 'Light' : 'Dark'
     })
 
     document.getElementById('btn-density').addEventListener('click', event => {
       const next = currentDensity === 'normal' ? 'compact' : currentDensity === 'compact' ? 'comfortable' : 'normal'
       currentDensity = next
-      root().dataset.tsDensity = next
+      root().dataset.elDensity = next
       event.currentTarget.textContent = next === 'normal' ? 'Compact' : next === 'compact' ? 'Comfortable' : 'Normal'
     })
 

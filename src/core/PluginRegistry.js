@@ -9,18 +9,18 @@ export class PluginRegistry {
 
   register(plugin) {
     if (!plugin || !plugin.name) {
-      console.warn('[TraceScope] Plugin must have a name property')
+      console.warn('[EventLens] Plugin must have a name property')
       return
     }
     if (this._installed.has(plugin.name)) {
-      console.warn(`[TraceScope] Plugin "${plugin.name}" is already installed`)
+      console.warn(`[EventLens] Plugin "${plugin.name}" is already installed`)
       return
     }
     try {
       plugin.install(this.ctx)
       this._installed.set(plugin.name, plugin)
     } catch (e) {
-      console.error(`[TraceScope] Plugin "${plugin.name}" install failed:`, e)
+      console.error(`[EventLens] Plugin "${plugin.name}" install failed:`, e)
     }
   }
 

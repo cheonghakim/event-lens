@@ -2,8 +2,8 @@
  * ExportPlugin — 이벤트 내보내기 (CSV / JSON / JSONL)
  *
  * 사용:
- *   import { ExportPlugin } from 'trace-scope'
- *   TraceScope.use(ExportPlugin)
+ *   import { ExportPlugin } from 'event-lens'
+ *   EventLens.use(ExportPlugin)
  */
 export const ExportPlugin = {
   name: 'export',
@@ -13,7 +13,7 @@ export const ExportPlugin = {
       label:   'CSV 내보내기',
       handler: async (event, { viewer }) => {
         const rows = await _getExportRows(viewer, event)
-        _downloadText(_toCSV(rows), `trace-scope-${_nowStr()}.csv`, 'text/csv;charset=utf-8')
+        _downloadText(_toCSV(rows), `event-lens-${_nowStr()}.csv`, 'text/csv;charset=utf-8')
       },
     })
 
@@ -21,7 +21,7 @@ export const ExportPlugin = {
       label:   'JSON 내보내기',
       handler: async (event, { viewer }) => {
         const rows = await _getExportRows(viewer, event)
-        _downloadText(JSON.stringify(rows, null, 2), `trace-scope-${_nowStr()}.json`, 'application/json')
+        _downloadText(JSON.stringify(rows, null, 2), `event-lens-${_nowStr()}.json`, 'application/json')
       },
     })
 
@@ -30,7 +30,7 @@ export const ExportPlugin = {
       handler: async (event, { viewer }) => {
         const rows = await _getExportRows(viewer, event)
         const text = rows.map(r => JSON.stringify(r)).join('\n')
-        _downloadText(text, `trace-scope-${_nowStr()}.jsonl`, 'application/x-ndjson')
+        _downloadText(text, `event-lens-${_nowStr()}.jsonl`, 'application/x-ndjson')
       },
     })
   },

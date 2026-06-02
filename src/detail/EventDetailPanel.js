@@ -30,18 +30,18 @@ export class EventDetailPanel {
   mount(container) {
     if (!this._opts.enabled) return
 
-    this._el = el('div', 'ts-detail-panel', {
+    this._el = el('div', 'el-detail-panel', {
       role: 'complementary', 'aria-label': '이벤트 상세',
     })
-    this._el.classList.add(`ts-detail-panel--${this._opts.layout}`)
+    this._el.classList.add(`el-detail-panel--${this._opts.layout}`)
     if (this._opts.layout === 'right') {
       this._el.style.width = `${this._opts.width}px`
     }
 
     // Header
-    const header    = el('div', 'ts-detail-header')
-    this._titleEl   = el('div', 'ts-detail-title', { textContent: '이벤트를 선택하세요' })
-    this._closeBtn = el('button', 'ts-detail-close-btn', {
+    const header    = el('div', 'el-detail-header')
+    this._titleEl   = el('div', 'el-detail-title', { textContent: '이벤트를 선택하세요' })
+    this._closeBtn = el('button', 'el-detail-close-btn', {
       textContent: '✕', type: 'button', 'aria-label': '닫기',
     })
     this._cleanups.push(on(this._closeBtn, 'click', () => this.clear()))
@@ -54,10 +54,10 @@ export class EventDetailPanel {
       ...(this._opts.tabs || ['parsedFields', 'rawLog', 'timeline']),
       'relatedEvents',
     ]
-    const tabBar = el('div', 'ts-detail-tabs', { role: 'tablist' })
+    const tabBar = el('div', 'el-detail-tabs', { role: 'tablist' })
     this._tabBtns = {}
     for (const tabId of availableTabs) {
-      const btn = el('button', 'ts-tab-btn', {
+      const btn = el('button', 'el-tab-btn', {
         type: 'button', role: 'tab',
         'aria-selected': tabId === this._activeTab ? 'true' : 'false',
         'data-tab':       tabId,
@@ -70,7 +70,7 @@ export class EventDetailPanel {
     this._el.appendChild(tabBar)
 
     // Content
-    this._contentEl = el('div', 'ts-detail-content')
+    this._contentEl = el('div', 'el-detail-content')
 
     // Instantiate all panels
     this._panels.parsedFields  = new ParsedFieldViewer({}, this._core._plugins?.ctx)
@@ -106,13 +106,13 @@ export class EventDetailPanel {
 
   show(event) {
     this._event = event
-    this._el?.classList.add('ts-detail-panel--open')
+    this._el?.classList.add('el-detail-panel--open')
     if (this._closeBtn) this._closeBtn.style.display = ''
 
     const sev = event.severity || 'unknown'
     this._titleEl.innerHTML =
-      `<span class="ts-badge ts-badge--${sev}">${severityLabel(sev)}</span>` +
-      `<span class="ts-detail-title-text">${escapeHtml(event.rule_name || event.id || '')}</span>`
+      `<span class="el-badge el-badge--${sev}">${severityLabel(sev)}</span>` +
+      `<span class="el-detail-title-text">${escapeHtml(event.rule_name || event.id || '')}</span>`
 
     this._panels.parsedFields?.render(event)
     this._panels.rawLog?.render(event)
@@ -129,7 +129,7 @@ export class EventDetailPanel {
 
   clear() {
     this._event = null
-    this._el?.classList.remove('ts-detail-panel--open')
+    this._el?.classList.remove('el-detail-panel--open')
     if (this._titleEl) this._titleEl.textContent = '이벤트를 선택하세요'
     if (this._closeBtn) this._closeBtn.style.display = 'none'
     for (const panel of Object.values(this._panels)) panel?.clear()
@@ -140,7 +140,7 @@ export class EventDetailPanel {
     this._activeTab = tabId
     Object.entries(this._tabBtns).forEach(([id, btn]) => {
       const active = id === tabId
-      btn.classList.toggle('ts-tab-btn--active', active)
+      btn.classList.toggle('el-tab-btn--active', active)
       btn.setAttribute('aria-selected', String(active))
     })
     this._syncTabVisibility()
@@ -161,7 +161,7 @@ export class EventDetailPanel {
     // Activate tab button
     if (this._tabBtns) {
       Object.entries(this._tabBtns).forEach(([id, btn]) => {
-        btn.classList.toggle('ts-tab-btn--active', id === this._activeTab)
+        btn.classList.toggle('el-tab-btn--active', id === this._activeTab)
         btn.setAttribute('aria-selected', id === this._activeTab ? 'true' : 'false')
       })
     }

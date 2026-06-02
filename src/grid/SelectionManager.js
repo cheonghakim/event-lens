@@ -8,7 +8,7 @@ export class SelectionManager {
   select(eventId, rowEl) {
     // Deselect previous
     if (this._selectedRow) {
-      this._selectedRow.classList.remove('ts-row--selected')
+      this._selectedRow.classList.remove('el-row--selected')
       this._selectedRow.setAttribute('aria-selected', 'false')
     }
 
@@ -16,7 +16,7 @@ export class SelectionManager {
     this._selectedRow = rowEl
 
     if (rowEl) {
-      rowEl.classList.add('ts-row--selected')
+      rowEl.classList.add('el-row--selected')
       rowEl.setAttribute('aria-selected', 'true')
     }
 
@@ -25,7 +25,7 @@ export class SelectionManager {
 
   deselect() {
     if (this._selectedRow) {
-      this._selectedRow.classList.remove('ts-row--selected')
+      this._selectedRow.classList.remove('el-row--selected')
       this._selectedRow.setAttribute('aria-selected', 'false')
     }
     this._selectedId  = null
@@ -40,11 +40,11 @@ export class SelectionManager {
   // Called when rows are re-rendered (virtual scroll) — re-apply visual selection
   onRowRendered(rowEl, eventId) {
     if (eventId === this._selectedId) {
-      rowEl.classList.add('ts-row--selected')
+      rowEl.classList.add('el-row--selected')
       rowEl.setAttribute('aria-selected', 'true')
       this._selectedRow = rowEl
     } else {
-      rowEl.classList.remove('ts-row--selected')
+      rowEl.classList.remove('el-row--selected')
       rowEl.setAttribute('aria-selected', 'false')
     }
   }

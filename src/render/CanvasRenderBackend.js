@@ -178,7 +178,7 @@ export class CanvasRenderBackend extends RenderBackend {
       // Background
       if (event.id === this._selectedId) {
         ctx.fillStyle = selectedBg
-      } else if (this._highlight?.getRowClasses(event)?.includes('ts-row--highlight-critical')) {
+      } else if (this._highlight?.getRowClasses(event)?.includes('el-row--highlight-critical')) {
         ctx.fillStyle = 'rgba(224,82,82,0.04)'
       } else {
         ctx.fillStyle = bg

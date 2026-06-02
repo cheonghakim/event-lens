@@ -30,7 +30,7 @@ export class ActionBar {
   }
 
   mount(container) {
-    this._el = el('div', 'ts-action-bar', { role: 'toolbar', 'aria-label': '이벤트 액션' })
+    this._el = el('div', 'el-action-bar', { role: 'toolbar', 'aria-label': '이벤트 액션' })
     container.appendChild(this._el)
   }
 
@@ -55,7 +55,7 @@ export class ActionBar {
       const group = action.group || 'other'
 
       if (lastGroup !== null && lastGroup !== group) {
-        this._el.appendChild(el('span', 'ts-action-sep', { 'aria-hidden': 'true' }))
+        this._el.appendChild(el('span', 'el-action-sep', { 'aria-hidden': 'true' }))
       }
       lastGroup = group
 
@@ -64,9 +64,9 @@ export class ActionBar {
         : (action.disabled === true)
 
       const cls = [
-        'ts-action-btn',
-        disabled ? 'ts-action-btn--disabled' : '',
-        action.builtin ? 'ts-action-btn--builtin' : '',
+        'el-action-btn',
+        disabled ? 'el-action-btn--disabled' : '',
+        action.builtin ? 'el-action-btn--builtin' : '',
       ].filter(Boolean).join(' ')
 
       const btn = el('button', cls, {
@@ -76,12 +76,12 @@ export class ActionBar {
 
       // Icon badge
       if (action.icon) {
-        const iconEl = el('span', 'ts-action-icon-badge', { 'aria-hidden': 'true' })
+        const iconEl = el('span', 'el-action-icon-badge', { 'aria-hidden': 'true' })
         iconEl.textContent = action.icon
         btn.appendChild(iconEl)
       }
 
-      const labelEl = el('span', 'ts-action-label')
+      const labelEl = el('span', 'el-action-label')
       labelEl.textContent = action.label
       btn.appendChild(labelEl)
 
@@ -97,7 +97,7 @@ export class ActionBar {
             this._bus.emit('event:action', { actionId: action.id, event })
             this._flash(labelEl, '완료')
           } catch (e) {
-            console.error(`[TraceScope] Action "${action.id}" failed:`, e)
+            console.error(`[EventLens] Action "${action.id}" failed:`, e)
             this._flash(labelEl, '오류')
           }
         }))

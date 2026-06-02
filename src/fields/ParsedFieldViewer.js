@@ -17,12 +17,12 @@ export class ParsedFieldViewer {
   }
 
   mount(container) {
-    this._el = el('div', 'ts-field-viewer')
+    this._el = el('div', 'el-field-viewer')
 
     // Toolbar
-    const toolbar = el('div', 'ts-field-toolbar')
+    const toolbar = el('div', 'el-field-toolbar')
 
-    this._searchInput = el('input', 'ts-field-search', {
+    this._searchInput = el('input', 'el-field-search', {
       type:         'text',
       placeholder:  '필드 검색',
       'aria-label': '필드 검색',
@@ -34,7 +34,7 @@ export class ParsedFieldViewer {
     this._cleanups.push(on(this._searchInput, 'input', searchDebounced))
     toolbar.appendChild(this._searchInput)
 
-    const modeBtn = el('button', 'ts-field-mode-btn', {
+    const modeBtn = el('button', 'el-field-mode-btn', {
       textContent: 'JSON',
       type:        'button',
       'aria-label': 'JSON 뷰 토글',
@@ -49,7 +49,7 @@ export class ParsedFieldViewer {
     this._el.appendChild(toolbar)
 
     // Body
-    this._bodyEl = el('div', 'ts-field-body')
+    this._bodyEl = el('div', 'el-field-body')
     this._el.appendChild(this._bodyEl)
 
     container.appendChild(this._el)
@@ -81,18 +81,18 @@ export class ParsedFieldViewer {
     // Collect fields: pinned first, then parsed, then root fields
     const entries = this._collectEntries(event)
 
-    const table = el('table', 'ts-field-table', { role: 'grid' })
+    const table = el('table', 'el-field-table', { role: 'grid' })
     const tbody = el('tbody')
 
     for (const { key, value, pinned } of entries) {
       if (this._search && !key.toLowerCase().includes(this._search) &&
           !String(value).toLowerCase().includes(this._search)) continue
 
-      const tr = el('tr', `ts-field-row${pinned ? ' ts-field-row--pinned' : ''}`)
+      const tr = el('tr', `el-field-row${pinned ? ' el-field-row--pinned' : ''}`)
 
       // Pin toggle
-      const tdPin = el('td', 'ts-field-pin')
-      const pinBtn = el('button', `ts-pin-btn${pinned ? ' ts-pin-btn--active' : ''}`, {
+      const tdPin = el('td', 'el-field-pin')
+      const pinBtn = el('button', `el-pin-btn${pinned ? ' el-pin-btn--active' : ''}`, {
         textContent:  pinned ? '★' : '☆',
         type:         'button',
         'aria-label': `${key} 필드 고정 ${pinned ? '해제' : ''}`,
@@ -106,24 +106,24 @@ export class ParsedFieldViewer {
       tr.appendChild(tdPin)
 
       // Key
-      const tdKey = el('td', 'ts-field-key', { textContent: key })
+      const tdKey = el('td', 'el-field-key', { textContent: key })
       tr.appendChild(tdKey)
 
       // Value
-      const tdVal = el('td', 'ts-field-value')
+      const tdVal = el('td', 'el-field-value')
       const pluginRenderer = this._pluginCtx?.getFieldRenderer(key)
       if (pluginRenderer) {
         const rendered = pluginRenderer(value, event)
         if (rendered instanceof HTMLElement) tdVal.appendChild(rendered)
         else tdVal.innerHTML = rendered || ''
       } else {
-        tdVal.innerHTML = `<span class="ts-field-val-text">${escapeHtml(this._formatValue(value))}</span>`
+        tdVal.innerHTML = `<span class="el-field-val-text">${escapeHtml(this._formatValue(value))}</span>`
       }
       tr.appendChild(tdVal)
 
       // Copy
-      const tdCopy = el('td', 'ts-field-copy')
-      const copyBtn = el('button', 'ts-field-copy-btn', {
+      const tdCopy = el('td', 'el-field-copy')
+      const copyBtn = el('button', 'el-field-copy-btn', {
         textContent:  '복사',
         type:         'button',
         'aria-label': `${key} 값 복사`,
@@ -141,9 +141,9 @@ export class ParsedFieldViewer {
 
   _renderJson(event) {
     clearEl(this._bodyEl)
-    const pre = el('pre', 'ts-field-json')
+    const pre = el('pre', 'el-field-json')
     pre.textContent = JSON.stringify(event, null, 2)
-    const copyBtn = el('button', 'ts-field-mode-btn', {
+    const copyBtn = el('button', 'el-field-mode-btn', {
       textContent:  'JSON 복사',
       type:         'button',
       style:        'margin-bottom:8px',

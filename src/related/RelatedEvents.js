@@ -19,7 +19,7 @@ export class RelatedEvents {
   }
 
   mount(container) {
-    this._el = el('div', 'ts-related-events', {
+    this._el = el('div', 'el-related-events', {
       role:         'region',
       'aria-label': '연관 이벤트',
     })
@@ -31,7 +31,7 @@ export class RelatedEvents {
     clearEl(this._el)
 
     if (!event) {
-      this._el.innerHTML = '<div class="ts-related-empty">이벤트를 선택하세요.</div>'
+      this._el.innerHTML = '<div class="el-related-empty">이벤트를 선택하세요.</div>'
       return
     }
 
@@ -47,20 +47,20 @@ export class RelatedEvents {
         if (related.length === 0) continue
 
         hasAny = true
-        const group = el('div', 'ts-related-group')
-        const groupLabel = el('div', 'ts-related-group-label', {
+        const group = el('div', 'el-related-group')
+        const groupLabel = el('div', 'el-related-group-label', {
           textContent: `${label}: ${value} (${related.length}건)`,
         })
         group.appendChild(groupLabel)
 
         related.slice(0, 10).forEach(r => {
-          const item = el('div', 'ts-related-item')
+          const item = el('div', 'el-related-item')
 
-          const sev = el('span', 'ts-related-item-sev')
-          sev.innerHTML = `<span class="ts-badge ts-badge--${r.severity || 'unknown'}">${this._sevLabel(r.severity)}</span>`
+          const sev = el('span', 'el-related-item-sev')
+          sev.innerHTML = `<span class="el-badge el-badge--${r.severity || 'unknown'}">${this._sevLabel(r.severity)}</span>`
 
-          const name = el('span', 'ts-related-item-name', { textContent: r.rule_name || r.id })
-          const time = el('span', 'ts-related-item-time', { textContent: formatTimestamp(r.timestamp) })
+          const name = el('span', 'el-related-item-name', { textContent: r.rule_name || r.id })
+          const time = el('span', 'el-related-item-time', { textContent: formatTimestamp(r.timestamp) })
 
           item.appendChild(sev)
           item.appendChild(name)
@@ -75,7 +75,7 @@ export class RelatedEvents {
         })
 
         if (related.length > 10) {
-          const more = el('div', 'ts-related-empty', {
+          const more = el('div', 'el-related-empty', {
             textContent: `+ ${related.length - 10}건 더 있음`,
           })
           group.appendChild(more)
@@ -88,14 +88,14 @@ export class RelatedEvents {
     }
 
     if (!hasAny) {
-      this._el.innerHTML = '<div class="ts-related-empty">연관 이벤트가 없습니다.</div>'
+      this._el.innerHTML = '<div class="el-related-empty">연관 이벤트가 없습니다.</div>'
     }
   }
 
   clear() {
     clearEl(this._el)
     if (this._el) {
-      this._el.innerHTML = '<div class="ts-related-empty">이벤트를 선택하세요.</div>'
+      this._el.innerHTML = '<div class="el-related-empty">이벤트를 선택하세요.</div>'
     }
     this._cleanups.forEach(fn => fn())
     this._cleanups = []

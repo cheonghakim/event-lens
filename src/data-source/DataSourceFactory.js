@@ -38,7 +38,7 @@ export function createDataSource(dataSource) {
   }
 
   throw new Error(
-    '[TraceScope] Invalid dataSource. Expected an array, async function, adapter object, ' +
+    '[EventLens] Invalid dataSource. Expected an array, async function, adapter object, ' +
     'or config with type: "server-range" | "websocket" | "sse".'
   )
 }

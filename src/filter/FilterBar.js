@@ -17,11 +17,11 @@ export class FilterBar {
   }
 
   mount(container) {
-    this._el = el('div', 'ts-filter-bar', { role: 'search', 'aria-label': '이벤트 필터' })
+    this._el = el('div', 'el-filter-bar', { role: 'search', 'aria-label': '이벤트 필터' })
 
     // ── Quick search ───────────────────────────────────────────────────────────
-    const searchWrap = el('div', 'ts-filter-search-wrap')
-    this._searchInput = el('input', 'ts-filter-search', {
+    const searchWrap = el('div', 'el-filter-search-wrap')
+    this._searchInput = el('input', 'el-filter-search', {
       type:         'text',
       placeholder:  'IP / 사용자 / 룰명 / severity / action 검색',
       'aria-label': '빠른 검색',
@@ -38,10 +38,10 @@ export class FilterBar {
     this._el.appendChild(searchWrap)
 
     // ── Severity toggles ──────────────────────────────────────────────────────
-    const sevWrap  = el('div', 'ts-filter-severity-wrap')
+    const sevWrap  = el('div', 'el-filter-severity-wrap')
     this._sevBtns  = {}
     SEVERITIES.forEach(sev => {
-      const btn = el('button', `ts-sev-btn ts-sev-btn--${sev}`, {
+      const btn = el('button', `el-sev-btn el-sev-btn--${sev}`, {
         textContent:    SEV_LABELS[sev],
         'data-sev':     sev,
         'aria-pressed': 'false',
@@ -54,8 +54,8 @@ export class FilterBar {
     this._el.appendChild(sevWrap)
 
     // ── Date range picker ─────────────────────────────────────────────────────
-    const timeWrap = el('div', 'ts-filter-time-wrap')
-    const timeLabel = el('span', 'ts-filter-label', { textContent: '기간' })
+    const timeWrap = el('div', 'el-filter-time-wrap')
+    const timeLabel = el('span', 'el-filter-label', { textContent: '기간' })
     timeWrap.appendChild(timeLabel)
 
     this._datePicker = new DateRangePicker({
@@ -75,7 +75,7 @@ export class FilterBar {
     this._el.appendChild(timeWrap)
 
     // ── Clear button ──────────────────────────────────────────────────────────
-    this._clearBtn = el('button', 'ts-btn ts-btn--ghost', {
+    this._clearBtn = el('button', 'el-btn el-btn--ghost', {
       textContent: '초기화',
       type:        'button',
       'aria-label': '필터 초기화',
@@ -84,11 +84,11 @@ export class FilterBar {
     this._el.appendChild(this._clearBtn)
 
     // ── Filter chips ──────────────────────────────────────────────────────────
-    this._chips = el('div', 'ts-filter-chips', { 'aria-label': '활성 필터' })
+    this._chips = el('div', 'el-filter-chips', { 'aria-label': '활성 필터' })
     this._el.appendChild(this._chips)
 
     // ── Result count ──────────────────────────────────────────────────────────
-    this._countEl = el('span', 'ts-filter-count', { 'aria-live': 'polite', 'aria-atomic': 'true' })
+    this._countEl = el('span', 'el-filter-count', { 'aria-live': 'polite', 'aria-atomic': 'true' })
     this._el.appendChild(this._countEl)
 
     container.appendChild(this._el)
@@ -106,7 +106,7 @@ export class FilterBar {
     this._searchInput.value = ''
     this._datePicker.clear()
     Object.values(this._sevBtns).forEach(btn => {
-      btn.classList.remove('ts-sev-btn--active')
+      btn.classList.remove('el-sev-btn--active')
       btn.setAttribute('aria-pressed', 'false')
     })
     this._engine.clear()
@@ -128,11 +128,11 @@ export class FilterBar {
     const idx = this._active.severity.indexOf(sev)
     if (idx === -1) {
       this._active.severity.push(sev)
-      btn.classList.add('ts-sev-btn--active')
+      btn.classList.add('el-sev-btn--active')
       btn.setAttribute('aria-pressed', 'true')
     } else {
       this._active.severity.splice(idx, 1)
-      btn.classList.remove('ts-sev-btn--active')
+      btn.classList.remove('el-sev-btn--active')
       btn.setAttribute('aria-pressed', 'false')
     }
     if (this._active.severity.length === 0) delete this._active.severity
@@ -171,7 +171,7 @@ export class FilterBar {
         remove: () => {
           delete this._active.severity
           Object.values(this._sevBtns).forEach(btn => {
-            btn.classList.remove('ts-sev-btn--active')
+            btn.classList.remove('el-sev-btn--active')
             btn.setAttribute('aria-pressed', 'false')
           })
           this._applyFilter()
@@ -206,9 +206,9 @@ export class FilterBar {
     }
 
     chips.forEach(({ label, remove }) => {
-      const chip = el('div', 'ts-filter-chip')
+      const chip = el('div', 'el-filter-chip')
       chip.appendChild(el('span', '', { textContent: label }))
-      const rmBtn = el('button', 'ts-filter-chip-remove', {
+      const rmBtn = el('button', 'el-filter-chip-remove', {
         type:         'button',
         textContent:  '×',
         'aria-label': `${label} 필터 제거`,

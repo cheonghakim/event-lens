@@ -2,8 +2,8 @@
  * MaskingPlugin — 민감 정보 마스킹
  *
  * 사용:
- *   import { MaskingPlugin } from 'trace-scope'
- *   TraceScope.use(MaskingPlugin.configure({
+ *   import { MaskingPlugin } from 'event-lens'
+ *   EventLens.use(MaskingPlugin.configure({
  *     fields:  ['src_ip', 'user'],   // 마스킹할 필드명
  *     pattern: '***',                // 마스킹 문자열 (기본: '***')
  *     reveal:  false,                // 클릭으로 원문 보기 허용 여부
@@ -39,7 +39,7 @@ function createPlugin(options = {}) {
       for (const field of fields) {
         ctx.registerFieldRenderer(field, (value) => {
           const wrap = document.createElement('span')
-          wrap.className = 'ts-cell-text ts-masking-cell'
+          wrap.className = 'el-cell-text el-masking-cell'
 
           const displayVal = _enabled ? maskValue(value, pattern) : (value ?? '-')
           wrap.textContent = displayVal

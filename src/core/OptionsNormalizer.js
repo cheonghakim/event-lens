@@ -10,9 +10,9 @@ export const DEFAULT_COLUMNS = [
 ]
 
 export function normalizeOptions(opts) {
-  if (!opts.container) throw new Error('[TraceScope] container is required')
+  if (!opts.container) throw new Error('[EventLens] container is required')
   if (opts.dataSource === undefined || opts.dataSource === null) {
-    throw new Error('[TraceScope] dataSource is required')
+    throw new Error('[EventLens] dataSource is required')
   }
 
   return {
@@ -31,7 +31,7 @@ export function normalizeOptions(opts) {
     worker:         normalizeWorker(opts.worker),
     renderMode:     opts.renderMode     || 'dom',    // 'dom' | 'canvas'
     groupBy:        opts.groupBy        || null,      // field name to group by
-    storageKey:     opts.storageKey     ?? 'trace-scope-state',  // false to disable
+    storageKey:     opts.storageKey     ?? 'event-lens-state',  // false to disable
   }
 }
 

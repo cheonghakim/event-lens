@@ -2,8 +2,8 @@
  * SoarPlugin — SOAR Playbook 연동
  *
  * 사용:
- *   import { SoarPlugin } from 'trace-scope'
- *   TraceScope.use(SoarPlugin.configure({
+ *   import { SoarPlugin } from 'event-lens'
+ *   EventLens.use(SoarPlugin.configure({
  *     playbooks: [
  *       {
  *         id:          'auto-block-critical',
@@ -120,13 +120,13 @@ function createPlugin(options = {}) {
   const STATUS_ICON  = { running: '◌',            done: '✓',          error: '✗'        }
 
   function _applyToRow(rowEl, eventId) {
-    rowEl.querySelector('.ts-soar-badge')?.remove()
+    rowEl.querySelector('.el-soar-badge')?.remove()
     const status = _rowStatuses.get(eventId)
     rowEl.dataset.soarStatus = status || ''
     if (!status) return
 
     const badge = document.createElement('span')
-    badge.className = `ts-soar-badge ts-soar-badge--${status}`
+    badge.className = `el-soar-badge el-soar-badge--${status}`
     badge.title = STATUS_LABEL[status]
     badge.setAttribute('aria-label', STATUS_LABEL[status])
     badge.textContent = `${STATUS_ICON[status]} ${STATUS_LABEL[status]}`
@@ -134,7 +134,7 @@ function createPlugin(options = {}) {
   }
 
   function _updateVisibleRow(eventId) {
-    const rowEl = document.querySelector(`.ts-row[data-event-id="${CSS.escape(eventId)}"]`)
+    const rowEl = document.querySelector(`.el-row[data-event-id="${CSS.escape(eventId)}"]`)
     if (rowEl) _applyToRow(rowEl, eventId)
   }
 

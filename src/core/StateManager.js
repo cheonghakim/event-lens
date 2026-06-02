@@ -6,7 +6,7 @@
  */
 export class StateManager {
   constructor(options = {}) {
-    this._key     = options.storageKey || 'trace-scope-state'
+    this._key     = options.storageKey || 'event-lens-state'
     this._version = 1
   }
 

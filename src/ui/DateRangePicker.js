@@ -27,10 +27,10 @@ export class DateRangePicker {
   }
 
   mount(container) {
-    this._el = el('div', 'ts-drp')
+    this._el = el('div', 'el-drp')
 
     // Trigger button
-    this._trigger = el('button', 'ts-drp-trigger ts-btn', {
+    this._trigger = el('button', 'el-drp-trigger el-btn', {
       type:         'button',
       'aria-haspopup': 'true',
       'aria-expanded': 'false',
@@ -78,14 +78,14 @@ export class DateRangePicker {
     this._open = true
     this._trigger.setAttribute('aria-expanded', 'true')
 
-    this._popover = el('div', 'ts-drp-popover')
+    this._popover = el('div', 'el-drp-popover')
 
     // Inherit theme from nearest ancestor so CSS variables resolve
-    const themeRoot = this._el?.closest('[data-ts-theme]')
-    const theme = themeRoot?.dataset.tsTheme || 'dark'
-    this._popover.dataset.tsTheme = theme
-    // ts-drp-root applies box-sizing reset and base button styles without full ts-root layout
-    this._popover.classList.add('ts-drp-root')
+    const themeRoot = this._el?.closest('[data-el-theme]')
+    const theme = themeRoot?.dataset.elTheme || 'dark'
+    this._popover.dataset.elTheme = theme
+    // el-drp-root applies box-sizing reset and base button styles without full el-root layout
+    this._popover.classList.add('el-drp-root')
 
     this._renderPopover()
 
@@ -124,11 +124,11 @@ export class DateRangePicker {
     clearEl(this._popover)
 
     // Title
-    const title = el('div', 'ts-drp-title')
-    const fromLabel = el('span', `ts-drp-range-label${this._selecting === 'from' ? ' ts-drp-range-active' : ''}`,
+    const title = el('div', 'el-drp-title')
+    const fromLabel = el('span', `el-drp-range-label${this._selecting === 'from' ? ' el-drp-range-active' : ''}`,
       { textContent: this._value.from ? this._formatDate(this._value.from) : '시작일 선택' })
-    const sep = el('span', 'ts-drp-sep', { textContent: '→' })
-    const toLabel = el('span', `ts-drp-range-label${this._selecting === 'to' ? ' ts-drp-range-active' : ''}`,
+    const sep = el('span', 'el-drp-sep', { textContent: '→' })
+    const toLabel = el('span', `el-drp-range-label${this._selecting === 'to' ? ' el-drp-range-active' : ''}`,
       { textContent: this._value.to ? this._formatDate(this._value.to) : '종료일 선택' })
     title.appendChild(fromLabel)
     title.appendChild(sep)
@@ -136,22 +136,22 @@ export class DateRangePicker {
     this._popover.appendChild(title)
 
     // Calendar
-    const calWrap = el('div', 'ts-drp-cal-wrap')
+    const calWrap = el('div', 'el-drp-cal-wrap')
     calWrap.appendChild(this._buildCalendar(this._viewYear, this._viewMonth))
     this._popover.appendChild(calWrap)
 
     // Time inputs
-    const timeRow = el('div', 'ts-drp-time-row')
+    const timeRow = el('div', 'el-drp-time-row')
     timeRow.appendChild(this._buildTimeInput('from'))
-    const timeSep = el('span', 'ts-drp-sep', { textContent: '~' })
+    const timeSep = el('span', 'el-drp-sep', { textContent: '~' })
     timeRow.appendChild(timeSep)
     timeRow.appendChild(this._buildTimeInput('to'))
     this._popover.appendChild(timeRow)
 
     // Actions
-    const actions = el('div', 'ts-drp-actions')
-    const clearBtn = el('button', 'ts-btn ts-btn--ghost', { type: 'button', textContent: '초기화' })
-    const applyBtn = el('button', 'ts-btn ts-btn--active', { type: 'button', textContent: '적용' })
+    const actions = el('div', 'el-drp-actions')
+    const clearBtn = el('button', 'el-btn el-btn--ghost', { type: 'button', textContent: '초기화' })
+    const applyBtn = el('button', 'el-btn el-btn--active', { type: 'button', textContent: '적용' })
     on(clearBtn, 'click', () => { this.clear(); this._closePopover() })
     on(applyBtn, 'click', () => { this._apply(); this._closePopover() })
     actions.appendChild(clearBtn)
@@ -160,13 +160,13 @@ export class DateRangePicker {
   }
 
   _buildCalendar(year, month) {
-    const wrap = el('div', 'ts-drp-cal')
+    const wrap = el('div', 'el-drp-cal')
 
     // Navigation
-    const nav = el('div', 'ts-drp-nav')
-    const prevBtn = el('button', 'ts-btn ts-btn--ghost ts-drp-nav-btn', { type: 'button', textContent: '‹' })
-    const nextBtn = el('button', 'ts-btn ts-btn--ghost ts-drp-nav-btn', { type: 'button', textContent: '›' })
-    const monthLabel = el('span', 'ts-drp-month-label', { textContent: `${year}년 ${MONTHS[month]}` })
+    const nav = el('div', 'el-drp-nav')
+    const prevBtn = el('button', 'el-btn el-btn--ghost el-drp-nav-btn', { type: 'button', textContent: '‹' })
+    const nextBtn = el('button', 'el-btn el-btn--ghost el-drp-nav-btn', { type: 'button', textContent: '›' })
+    const monthLabel = el('span', 'el-drp-month-label', { textContent: `${year}년 ${MONTHS[month]}` })
 
     on(prevBtn, 'click', () => {
       if (month === 0) { this._viewYear--; this._viewMonth = 11 }
@@ -185,34 +185,34 @@ export class DateRangePicker {
     wrap.appendChild(nav)
 
     // Day headers
-    const dayRow = el('div', 'ts-drp-days-header')
-    DAYS.forEach(d => dayRow.appendChild(el('span', 'ts-drp-day-name', { textContent: d })))
+    const dayRow = el('div', 'el-drp-days-header')
+    DAYS.forEach(d => dayRow.appendChild(el('span', 'el-drp-day-name', { textContent: d })))
     wrap.appendChild(dayRow)
 
     // Days grid
-    const grid = el('div', 'ts-drp-days-grid')
+    const grid = el('div', 'el-drp-days-grid')
     const firstDay = new Date(year, month, 1).getDay()
     const daysInMonth = new Date(year, month + 1, 0).getDate()
 
     // Empty cells before first day
     for (let i = 0; i < firstDay; i++) {
-      grid.appendChild(el('span', 'ts-drp-day ts-drp-day--empty'))
+      grid.appendChild(el('span', 'el-drp-day el-drp-day--empty'))
     }
 
     // Day cells
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(year, month, d)
-      const cell = el('button', 'ts-drp-day', { type: 'button', textContent: String(d) })
+      const cell = el('button', 'el-drp-day', { type: 'button', textContent: String(d) })
 
       // Highlight selected range
       const from = this._value.from ? this._dayStart(this._value.from) : null
       const to   = this._value.to   ? this._dayStart(this._value.to)   : null
       const cur  = this._dayStart(date)
 
-      if (from && cur.getTime() === from.getTime()) cell.classList.add('ts-drp-day--from')
-      if (to   && cur.getTime() === to.getTime())   cell.classList.add('ts-drp-day--to')
-      if (from && to && cur > from && cur < to)      cell.classList.add('ts-drp-day--in-range')
-      if (cur.getTime() === this._dayStart(new Date()).getTime()) cell.classList.add('ts-drp-day--today')
+      if (from && cur.getTime() === from.getTime()) cell.classList.add('el-drp-day--from')
+      if (to   && cur.getTime() === to.getTime())   cell.classList.add('el-drp-day--to')
+      if (from && to && cur > from && cur < to)      cell.classList.add('el-drp-day--in-range')
+      if (cur.getTime() === this._dayStart(new Date()).getTime()) cell.classList.add('el-drp-day--today')
 
       on(cell, 'click', () => this._selectDay(date))
       grid.appendChild(cell)
@@ -223,9 +223,9 @@ export class DateRangePicker {
   }
 
   _buildTimeInput(side) {
-    const wrap  = el('div', 'ts-drp-time-wrap')
-    const label = el('span', 'ts-drp-time-label', { textContent: side === 'from' ? '시작' : '종료' })
-    const input = el('input', 'ts-drp-time-input', { type: 'time', step: '60' })
+    const wrap  = el('div', 'el-drp-time-wrap')
+    const label = el('span', 'el-drp-time-label', { textContent: side === 'from' ? '시작' : '종료' })
+    const input = el('input', 'el-drp-time-input', { type: 'time', step: '60' })
 
     const date = this._value[side]
     if (date) {
@@ -274,13 +274,13 @@ export class DateRangePicker {
     const { from, to } = this._value
     if (from && to) {
       this._trigger.textContent = `${this._formatDate(from)} — ${this._formatDate(to)}`
-      this._trigger.classList.add('ts-btn--active')
+      this._trigger.classList.add('el-btn--active')
     } else if (from) {
       this._trigger.textContent = `${this._formatDate(from)} — 종료일 선택`
-      this._trigger.classList.remove('ts-btn--active')
+      this._trigger.classList.remove('el-btn--active')
     } else {
       this._trigger.textContent = '기간 선택'
-      this._trigger.classList.remove('ts-btn--active')
+      this._trigger.classList.remove('el-btn--active')
     }
   }
 

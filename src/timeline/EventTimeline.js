@@ -23,12 +23,12 @@ const STEP_LABELS = {
 }
 
 const STATUS_CLASS = {
-  done:      'ts-tl-step--done',
-  running:   'ts-tl-step--running',
-  failed:    'ts-tl-step--failed',
-  pending:   'ts-tl-step--pending',
-  skipped:   'ts-tl-step--skipped',
-  escalated: 'ts-tl-step--escalated',
+  done:      'el-tl-step--done',
+  running:   'el-tl-step--running',
+  failed:    'el-tl-step--failed',
+  pending:   'el-tl-step--pending',
+  skipped:   'el-tl-step--skipped',
+  escalated: 'el-tl-step--escalated',
 }
 
 const STATUS_LABELS = {
@@ -47,7 +47,7 @@ export class EventTimeline {
   }
 
   mount(container) {
-    this._el = el('div', 'ts-event-timeline', {
+    this._el = el('div', 'el-event-timeline', {
       role:         'list',
       'aria-label': '처리 이력',
     })
@@ -59,13 +59,13 @@ export class EventTimeline {
 
     const items = event?.timeline
     if (!items || items.length === 0) {
-      this._el.innerHTML = '<div class="ts-tl-empty">처리 이력이 없습니다.</div>'
+      this._el.innerHTML = '<div class="el-tl-empty">처리 이력이 없습니다.</div>'
       return
     }
 
     items.forEach((item, idx) => {
-      const statusClass = STATUS_CLASS[item.status] || 'ts-tl-step--pending'
-      const stepEl = el('div', `ts-tl-step ${statusClass}`, {
+      const statusClass = STATUS_CLASS[item.status] || 'el-tl-step--pending'
+      const stepEl = el('div', `el-tl-step ${statusClass}`, {
         role:         'listitem',
         'aria-label': `${STEP_LABELS[item.type] || item.type}: ${STATUS_LABELS[item.status] || item.status}`,
         style:        'cursor:pointer',
@@ -73,35 +73,35 @@ export class EventTimeline {
 
       // Connector (not for last)
       if (idx < items.length - 1) {
-        stepEl.appendChild(el('div', 'ts-tl-connector'))
+        stepEl.appendChild(el('div', 'el-tl-connector'))
       }
 
       // Code icon
       const code = STEP_CODES[item.type] || item.type?.slice(0,3).toUpperCase() || '···'
-      stepEl.appendChild(el('div', 'ts-tl-icon', { textContent: code, title: item.type }))
+      stepEl.appendChild(el('div', 'el-tl-icon', { textContent: code, title: item.type }))
 
       // Content
-      const content = el('div', 'ts-tl-content')
-      const header  = el('div', 'ts-tl-header')
+      const content = el('div', 'el-tl-content')
+      const header  = el('div', 'el-tl-header')
 
-      header.appendChild(el('span', 'ts-tl-type',
+      header.appendChild(el('span', 'el-tl-type',
         { textContent: STEP_LABELS[item.type] || item.type }))
 
-      header.appendChild(el('span', `ts-tl-status ts-tl-status--${item.status}`,
+      header.appendChild(el('span', `el-tl-status el-tl-status--${item.status}`,
         { textContent: STATUS_LABELS[item.status] || item.status }))
 
       content.appendChild(header)
 
       if (item.time) {
-        content.appendChild(el('div', 'ts-tl-time', { textContent: formatTimestamp(item.time) }))
+        content.appendChild(el('div', 'el-tl-time', { textContent: formatTimestamp(item.time) }))
       }
 
       if (item.actor) {
-        content.appendChild(el('div', 'ts-tl-actor', { textContent: `담당: ${item.actor}` }))
+        content.appendChild(el('div', 'el-tl-actor', { textContent: `담당: ${item.actor}` }))
       }
 
       if (item.detail) {
-        content.appendChild(el('div', 'ts-tl-detail', { textContent: item.detail }))
+        content.appendChild(el('div', 'el-tl-detail', { textContent: item.detail }))
       }
 
       stepEl.appendChild(content)
@@ -116,7 +116,7 @@ export class EventTimeline {
 
   clear() {
     clearEl(this._el)
-    if (this._el) this._el.innerHTML = '<div class="ts-tl-empty">이벤트를 선택하세요.</div>'
+    if (this._el) this._el.innerHTML = '<div class="el-tl-empty">이벤트를 선택하세요.</div>'
   }
 
   destroy() { this._el?.remove() }

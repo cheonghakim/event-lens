@@ -1,14 +1,14 @@
 {
-  "name": "trace-scope",
+  "name": "event-lens",
   "version": "0.1.0",
   "description": "Enterprise security event viewer library for SOC/SIEM/SOAR",
-  "homepage": "https://cheonghakim.github.io/trace-scope",
+  "homepage": "https://cheonghakim.github.io/event-lens",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cheonghakim/trace-scope.git"
+    "url": "git+https://github.com/cheonghakim/event-lens.git"
   },
   "bugs": {
-    "url": "https://github.com/cheonghakim/trace-scope/issues"
+    "url": "https://github.com/cheonghakim/event-lens/issues"
   },
   "type": "module",
   "sideEffects": [
@@ -20,7 +20,7 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./style": "./dist/trace-scope.css"
+    "./style": "./dist/event-lens.css"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",

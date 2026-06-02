@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.js'),
-      name: 'TraceScope',
+      name: 'EventLens',
       formats: ['es', 'cjs', 'umd'],
       fileName: (format) => {
         if (format === 'es') return 'index.mjs'
@@ -16,7 +16,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        assetFileNames: 'trace-scope.[ext]'
+        assetFileNames: 'event-lens.[ext]'
       }
     }
   }

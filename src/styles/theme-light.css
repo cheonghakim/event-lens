@@ -1,66 +1,66 @@
-/* TraceScope — Light theme */
+/* EventLens — Light theme */
 
-[data-ts-theme="light"],
-.ts-root[data-ts-theme="light"] {
-  --ts-font-family:    'Inter', 'Noto Sans KR', -apple-system, sans-serif;
-  --ts-font-size:      13px;
-  --ts-line-height:    1.4;
+[data-el-theme="light"],
+.el-root[data-el-theme="light"] {
+  --el-font-family:    'Inter', 'Noto Sans KR', -apple-system, sans-serif;
+  --el-font-size:      13px;
+  --el-line-height:    1.4;
 
   /* Row heights */
-  --ts-row-height:             32px;
-  --ts-row-height-compact:     24px;
-  --ts-row-height-comfortable: 40px;
+  --el-row-height:             32px;
+  --el-row-height-compact:     24px;
+  --el-row-height-comfortable: 40px;
 
   /* Header */
-  --ts-header-height:  34px;
+  --el-header-height:  34px;
 
   /* Base colors */
-  --ts-bg:             #f8f8f8;
-  --ts-bg-alt:         #f1f1f1;
-  --ts-bg-elevated:    #ffffff;
-  --ts-border:         #d4d4d4;
-  --ts-border-dashed:  #c0c0c0;
-  --ts-border-hover:   #888888;
-  --ts-row-border:     #ebebeb;
-  --ts-text:           #1a1a1a;
-  --ts-text-muted:     #999999;
-  --ts-text-secondary: #666666;
-  --ts-accent:         #2563eb;
-  --ts-accent-hover:   #1d4ed8;
+  --el-bg:             #f8f8f8;
+  --el-bg-alt:         #f1f1f1;
+  --el-bg-elevated:    #ffffff;
+  --el-border:         #d4d4d4;
+  --el-border-dashed:  #c0c0c0;
+  --el-border-hover:   #888888;
+  --el-row-border:     #ebebeb;
+  --el-text:           #1a1a1a;
+  --el-text-muted:     #999999;
+  --el-text-secondary: #666666;
+  --el-accent:         #2563eb;
+  --el-accent-hover:   #1d4ed8;
 
   /* Header & Panel */
-  --ts-header-bg:      #f1f1f1;
-  --ts-panel-bg:       #f8f8f8;
-  --ts-panel-border:   #d4d4d4;
+  --el-header-bg:      #f1f1f1;
+  --el-panel-bg:       #f8f8f8;
+  --el-panel-border:   #d4d4d4;
 
   /* Row states */
-  --ts-row-hover-bg:    #efefef;
-  --ts-row-selected-bg: rgba(37, 99, 235, 0.06);
-  --ts-row-selected-border: rgba(37, 99, 235, 0.4);
+  --el-row-hover-bg:    #efefef;
+  --el-row-selected-bg: rgba(37, 99, 235, 0.06);
+  --el-row-selected-border: rgba(37, 99, 235, 0.4);
 
   /* Log viewer */
-  --ts-log-bg:         #fcfcfc;
-  --ts-log-text:       #2d2d2d;
+  --el-log-bg:         #fcfcfc;
+  --el-log-text:       #2d2d2d;
 
   /* Severity — slightly darker for light background */
-  --ts-color-critical: #c43030;
-  --ts-color-high:     #b85e18;
-  --ts-color-medium:   #8b6a12;
-  --ts-color-low:      #2d7a35;
-  --ts-color-info:     #1a5fb5;
-  --ts-color-unknown:  #707070;
+  --el-color-critical: #c43030;
+  --el-color-high:     #b85e18;
+  --el-color-medium:   #8b6a12;
+  --el-color-low:      #2d7a35;
+  --el-color-info:     #1a5fb5;
+  --el-color-unknown:  #707070;
 
   /* Severity badge backgrounds */
-  --ts-badge-bg-critical: rgba(196, 48,  48,  0.08);
-  --ts-badge-bg-high:     rgba(184, 94,  24,  0.08);
-  --ts-badge-bg-medium:   rgba(139, 106, 18,  0.08);
-  --ts-badge-bg-low:      rgba(45,  122, 53,  0.08);
-  --ts-badge-bg-info:     rgba(26,  95,  181, 0.08);
-  --ts-badge-bg-unknown:  rgba(112, 112, 112, 0.08);
+  --el-badge-bg-critical: rgba(196, 48,  48,  0.08);
+  --el-badge-bg-high:     rgba(184, 94,  24,  0.08);
+  --el-badge-bg-medium:   rgba(139, 106, 18,  0.08);
+  --el-badge-bg-low:      rgba(45,  122, 53,  0.08);
+  --el-badge-bg-info:     rgba(26,  95,  181, 0.08);
+  --el-badge-bg-unknown:  rgba(112, 112, 112, 0.08);
 
   /* Scrollbar */
-  --ts-scroll-track:       #ececec;
-  --ts-scroll-thumb:       #cccccc;
-  --ts-scroll-thumb-hover: #aaaaaa;
-  --ts-scroll-width:       5px;
+  --el-scroll-track:       #ececec;
+  --el-scroll-thumb:       #cccccc;
+  --el-scroll-thumb-hover: #aaaaaa;
+  --el-scroll-width:       5px;
 }

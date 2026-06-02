@@ -16,10 +16,10 @@ export class RowRenderer {
 
     // Apply highlight classes
     const extraClasses = this._highlight ? this._highlight.getRowClasses(event) : []
-    rowEl.className = ['ts-row', `ts-row--${event.severity || 'unknown'}`, ...extraClasses].join(' ')
+    rowEl.className = ['el-row', `el-row--${event.severity || 'unknown'}`, ...extraClasses].join(' ')
 
     // Render cells
-    const cells = rowEl.querySelectorAll('.ts-cell')
+    const cells = rowEl.querySelectorAll('.el-cell')
     const cols  = this._cm.columns
 
     if (cells.length !== cols.length) {
@@ -37,17 +37,17 @@ export class RowRenderer {
   }
 
   createRow(event, rowIndex) {
-    const rowEl = el('div', 'ts-row', {
+    const rowEl = el('div', 'el-row', {
       role: 'row',
       tabindex: '0',
       'aria-rowindex': rowIndex + 1,
       'data-event-id': event.id,
       'data-row-index': rowIndex,
     })
-    rowEl.className = ['ts-row', `ts-row--${event.severity || 'unknown'}`].join(' ')
+    rowEl.className = ['el-row', `el-row--${event.severity || 'unknown'}`].join(' ')
 
     for (const col of this._cm.columns) {
-      const cell = el('div', 'ts-cell', {
+      const cell = el('div', 'el-cell', {
         'data-col-id':  col.id,
         style: `width:${col.width}px;min-width:${col.minWidth || 60}px`,
       })
@@ -61,7 +61,7 @@ export class RowRenderer {
   _rebuildCells(rowEl, event) {
     while (rowEl.firstChild) rowEl.removeChild(rowEl.firstChild)
     for (const col of this._cm.columns) {
-      const cell = el('div', 'ts-cell', {
+      const cell = el('div', 'el-cell', {
         'data-col-id': col.id,
         style: `width:${col.width}px;min-width:${col.minWidth || 60}px`,
       })
@@ -106,14 +106,14 @@ export class RowRenderer {
         cellEl.innerHTML = this._renderSeverityBadge(event.severity)
         break
       case 'timestamp':
-        cellEl.innerHTML = `<span class="ts-cell-time">${escapeHtml(formatTimestamp(event.timestamp))}</span>`
+        cellEl.innerHTML = `<span class="el-cell-time">${escapeHtml(formatTimestamp(event.timestamp))}</span>`
         break
       case 'risk_score':
         cellEl.innerHTML = this._renderRiskScore(event.risk_score)
         break
       default: {
         const val = event[col.field]
-        cellEl.innerHTML = `<span class="ts-cell-text">${escapeHtml(val != null ? String(val) : '-')}</span>`
+        cellEl.innerHTML = `<span class="el-cell-text">${escapeHtml(val != null ? String(val) : '-')}</span>`
       }
     }
   }
@@ -121,24 +121,24 @@ export class RowRenderer {
   _renderSeverityBadge(severity) {
     const sev   = severity || 'unknown'
     const label = severityLabel(sev)
-    return `<span class="ts-badge ts-badge--${sev}" aria-label="Severity: ${sev}">${label}</span>`
+    return `<span class="el-badge el-badge--${sev}" aria-label="Severity: ${sev}">${label}</span>`
   }
 
   _renderRiskScore(score) {
-    if (score == null) return '<span class="ts-cell-text">-</span>'
+    if (score == null) return '<span class="el-cell-text">-</span>'
     const pct   = Math.min(100, Math.max(0, score))
-    const color = pct >= 80 ? 'var(--ts-color-critical)'
-                : pct >= 60 ? 'var(--ts-color-high)'
-                : pct >= 40 ? 'var(--ts-color-medium)'
-                :              'var(--ts-color-low)'
-    return `<span class="ts-risk-bar" title="${pct}">
-      <span class="ts-risk-fill" style="width:${pct}%;background:${color}"></span>
-      <span class="ts-risk-text">${pct}</span>
+    const color = pct >= 80 ? 'var(--el-color-critical)'
+                : pct >= 60 ? 'var(--el-color-high)'
+                : pct >= 40 ? 'var(--el-color-medium)'
+                :              'var(--el-color-low)'
+    return `<span class="el-risk-bar" title="${pct}">
+      <span class="el-risk-fill" style="width:${pct}%;background:${color}"></span>
+      <span class="el-risk-text">${pct}</span>
     </span>`
   }
 
   updateColumnWidths(rowEl) {
-    const cells = rowEl.querySelectorAll('.ts-cell')
+    const cells = rowEl.querySelectorAll('.el-cell')
     this._cm.columns.forEach((col, i) => {
       if (cells[i]) {
         cells[i].style.width    = `${col.width}px`

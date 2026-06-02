@@ -1,16 +1,16 @@
-/* TraceScope — UI components (DateRangePicker, etc.) */
+/* EventLens — UI components (DateRangePicker, etc.) */
 
 /* Scoped reset for popover elements appended to document.body */
-.ts-drp-root,
-.ts-drp-root *,
-.ts-drp-root *::before,
-.ts-drp-root *::after {
+.el-drp-root,
+.el-drp-root *,
+.el-drp-root *::before,
+.el-drp-root *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: var(--ts-font-family, 'Inter', system-ui, sans-serif);
+  font-family: var(--el-font-family, 'Inter', system-ui, sans-serif);
 }
-.ts-drp-root button {
+.el-drp-root button {
   border: none;
   background: none;
   cursor: pointer;
@@ -19,23 +19,23 @@
   font-family: inherit;
   font-size: inherit;
 }
-.ts-drp-root button:focus-visible { outline: 2px solid var(--ts-accent, #2563eb); outline-offset: 2px; }
+.el-drp-root button:focus-visible { outline: 2px solid var(--el-accent, #2563eb); outline-offset: 2px; }
 
 /* ═══════════════════════════════════════════════════════
    DateRangePicker
    ═══════════════════════════════════════════════════════ */
-.ts-drp { position: relative; display: inline-flex; }
+.el-drp { position: relative; display: inline-flex; }
 
-.ts-drp-trigger {
+.el-drp-trigger {
   min-width:           160px;
   justify-content:     center;
   font-variant-numeric: tabular-nums;
-  /* .ts-btn 상속으로 dashed outline 자동 적용 */
+  /* .el-btn 상속으로 dashed outline 자동 적용 */
 }
 
-.ts-drp-popover {
-  background:   var(--ts-bg-elevated);
-  border:       1px solid var(--ts-border);
+.el-drp-popover {
+  background:   var(--el-bg-elevated);
+  border:       1px solid var(--el-border);
   border-radius: 3px;
   box-shadow:   0 12px 32px rgba(0,0,0,0.45);
   padding:      12px;
@@ -46,7 +46,7 @@
 }
 
 /* Range labels */
-.ts-drp-title {
+.el-drp-title {
   display:       flex;
   align-items:   center;
   gap:           6px;
@@ -54,38 +54,38 @@
   font-size:     11px;
 }
 
-.ts-drp-range-label {
+.el-drp-range-label {
   flex:           1;
   text-align:     center;
   padding:        3px 6px;
-  border:         1px solid var(--ts-border);
+  border:         1px solid var(--el-border);
   border-radius:  2px;
-  color:          var(--ts-text-muted);
+  color:          var(--el-text-muted);
   font-size:      10px;
   font-variant-numeric: tabular-nums;
-  background:     var(--ts-bg-alt);
+  background:     var(--el-bg-alt);
 }
 
-.ts-drp-range-active {
-  border-color: var(--ts-accent);
-  color:        var(--ts-accent);
+.el-drp-range-active {
+  border-color: var(--el-accent);
+  color:        var(--el-accent);
 }
 
-.ts-drp-sep {
-  color:      var(--ts-text-muted);
+.el-drp-sep {
+  color:      var(--el-text-muted);
   font-size:  11px;
   flex-shrink: 0;
 }
 
 /* Calendar navigation */
-.ts-drp-nav {
+.el-drp-nav {
   display:         flex;
   align-items:     center;
   justify-content: space-between;
   margin-bottom:   8px;
 }
 
-.ts-drp-nav-btn {
+.el-drp-nav-btn {
   width:   24px;
   height:  24px;
   padding: 0;
@@ -95,36 +95,36 @@
   font-size: 14px;
 }
 
-.ts-drp-month-label {
+.el-drp-month-label {
   font-size:  11px;
   font-weight: 600;
-  color:      var(--ts-text);
+  color:      var(--el-text);
 }
 
 /* Day names header */
-.ts-drp-days-header {
+.el-drp-days-header {
   display:               grid;
   grid-template-columns: repeat(7, 1fr);
   margin-bottom:         4px;
 }
 
-.ts-drp-day-name {
+.el-drp-day-name {
   text-align:  center;
   font-size:   9px;
-  color:       var(--ts-text-muted);
+  color:       var(--el-text-muted);
   font-weight: 600;
   text-transform: uppercase;
   padding:     2px 0;
 }
 
 /* Days grid */
-.ts-drp-days-grid {
+.el-drp-days-grid {
   display:               grid;
   grid-template-columns: repeat(7, 1fr);
   gap:                   1px;
 }
 
-.ts-drp-day {
+.el-drp-day {
   aspect-ratio:  1;
   display:       flex;
   align-items:   center;
@@ -133,83 +133,83 @@
   font-variant-numeric: tabular-nums;
   cursor:        pointer;
   border-radius: 2px;
-  color:         var(--ts-text-secondary);
+  color:         var(--el-text-secondary);
   background:    transparent;
   border:        none;
   font-family:   inherit;
   transition:    background 0.1s, color 0.1s;
 }
 
-.ts-drp-day:hover:not(.ts-drp-day--empty) {
-  background: var(--ts-row-hover-bg);
-  color:      var(--ts-text);
+.el-drp-day:hover:not(.el-drp-day--empty) {
+  background: var(--el-row-hover-bg);
+  color:      var(--el-text);
 }
 
-.ts-drp-day--empty  { pointer-events: none; }
-.ts-drp-day--today  { color: var(--ts-accent); font-weight: 600; }
+.el-drp-day--empty  { pointer-events: none; }
+.el-drp-day--today  { color: var(--el-accent); font-weight: 600; }
 
-.ts-drp-day--from,
-.ts-drp-day--to {
-  background: var(--ts-accent) !important;
+.el-drp-day--from,
+.el-drp-day--to {
+  background: var(--el-accent) !important;
   color:      #fff !important;
   font-weight: 600;
 }
 
-.ts-drp-day--in-range {
+.el-drp-day--in-range {
   background: rgba(37, 99, 235, 0.10);
-  color:      var(--ts-text);
+  color:      var(--el-text);
   border-radius: 0;
 }
 
 /* Time row */
-.ts-drp-time-row {
+.el-drp-time-row {
   display:       flex;
   align-items:   center;
   gap:           6px;
   margin-top:    10px;
   padding-top:   10px;
-  border-top:    1px solid var(--ts-border);
+  border-top:    1px solid var(--el-border);
 }
 
-.ts-drp-time-wrap {
+.el-drp-time-wrap {
   display:     flex;
   align-items: center;
   gap:         4px;
   flex:        1;
 }
 
-.ts-drp-time-label {
+.el-drp-time-label {
   font-size:  10px;
-  color:      var(--ts-text-muted);
+  color:      var(--el-text-muted);
   white-space: nowrap;
 }
 
-.ts-drp-time-input {
+.el-drp-time-input {
   flex:          1;
   height:        26px;
   padding:       0 6px;
-  border:        1px dashed var(--ts-border-dashed);
+  border:        1px dashed var(--el-border-dashed);
   border-radius: 2px;
   background:    transparent;
-  color:         var(--ts-text);
+  color:         var(--el-text);
   font-size:     11px;
   font-family:   inherit;
   font-variant-numeric: tabular-nums;
   transition:    border-style 0.12s, border-color 0.12s;
 }
 
-.ts-drp-time-input:hover { border-style: solid; }
-.ts-drp-time-input:focus { border-style: solid; border-color: var(--ts-accent); outline: none; }
+.el-drp-time-input:hover { border-style: solid; }
+.el-drp-time-input:focus { border-style: solid; border-color: var(--el-accent); outline: none; }
 
 /* time input color scheme for dark mode */
-.ts-drp-time-input::-webkit-calendar-picker-indicator { display: none; }
+.el-drp-time-input::-webkit-calendar-picker-indicator { display: none; }
 
 /* Actions */
-.ts-drp-actions {
+.el-drp-actions {
   display:       flex;
   justify-content: flex-end;
   gap:           6px;
   margin-top:    10px;
   padding-top:   10px;
-  border-top:    1px solid var(--ts-border);
+  border-top:    1px solid var(--el-border);
 }

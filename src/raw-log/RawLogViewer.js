@@ -14,12 +14,12 @@ export class RawLogViewer {
   }
 
   mount(container) {
-    this._el = el('div', 'ts-raw-log-viewer')
+    this._el = el('div', 'el-raw-log-viewer')
 
     // Toolbar
-    const toolbar = el('div', 'ts-raw-log-toolbar')
+    const toolbar = el('div', 'el-raw-log-toolbar')
 
-    const copyBtn = el('button', 'ts-raw-log-btn', {
+    const copyBtn = el('button', 'el-raw-log-btn', {
       textContent: '복사',
       type:        'button',
       'aria-label': '원문 로그 복사',
@@ -27,7 +27,7 @@ export class RawLogViewer {
     this._cleanups.push(on(copyBtn, 'click', () => this._copyLog()))
     toolbar.appendChild(copyBtn)
 
-    const wrapBtn = el('button', 'ts-raw-log-btn', {
+    const wrapBtn = el('button', 'el-raw-log-btn', {
       textContent: '줄바꿈',
       type:        'button',
       'aria-label': '줄바꿈 토글',
@@ -36,7 +36,7 @@ export class RawLogViewer {
     toolbar.appendChild(wrapBtn)
 
     if (this._masking?.enabled) {
-      const maskBtn = el('button', 'ts-raw-log-btn', {
+      const maskBtn = el('button', 'el-raw-log-btn', {
         textContent: '마스킹',
         type:        'button',
         'aria-label': '민감 정보 마스킹 토글',
@@ -52,7 +52,7 @@ export class RawLogViewer {
     this._el.appendChild(toolbar)
 
     // Log area
-    this._logEl = el('pre', `ts-raw-log-content ts-raw-log--${this._wrap}`, {
+    this._logEl = el('pre', `el-raw-log-content el-raw-log--${this._wrap}`, {
       role:         'region',
       'aria-label': '원문 로그',
       tabindex:     '0',
@@ -69,7 +69,7 @@ export class RawLogViewer {
   }
 
   clear() {
-    if (this._logEl) this._logEl.innerHTML = '<span class="ts-raw-log-empty">로그 없음</span>'
+    if (this._logEl) this._logEl.innerHTML = '<span class="el-raw-log-empty">로그 없음</span>'
     this._currentLog   = ''
     this._currentEvent = null
   }
@@ -91,7 +91,7 @@ export class RawLogViewer {
   _renderToken({ type, value }) {
     const safe = escapeHtml(value)
     if (type === 'text') return safe
-    return `<span class="ts-token ts-token--${type}" title="${type}">${safe}</span>`
+    return `<span class="el-token el-token--${type}" title="${type}">${safe}</span>`
   }
 
   _copyLog() {
@@ -102,7 +102,7 @@ export class RawLogViewer {
   }
 
   _showCopyFeedback() {
-    const badge = el('span', 'ts-copy-feedback', { textContent: '복사됨!' })
+    const badge = el('span', 'el-copy-feedback', { textContent: '복사됨!' })
     this._el.appendChild(badge)
     setTimeout(() => badge.remove(), 1500)
   }
@@ -110,7 +110,7 @@ export class RawLogViewer {
   _toggleWrap() {
     this._wrap = this._wrap === 'none' ? 'soft' : 'none'
     if (this._logEl) {
-      this._logEl.className = `ts-raw-log-content ts-raw-log--${this._wrap}`
+      this._logEl.className = `el-raw-log-content el-raw-log--${this._wrap}`
     }
   }
 

@@ -21,7 +21,7 @@ export class EventBus {
 
   emit(event, data) {
     this._listeners.get(event)?.forEach(cb => {
-      try { cb(data) } catch (e) { console.error(`[TraceScope] EventBus error on "${event}":`, e) }
+      try { cb(data) } catch (e) { console.error(`[EventLens] EventBus error on "${event}":`, e) }
     })
     return this
   }

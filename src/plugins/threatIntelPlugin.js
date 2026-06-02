@@ -2,8 +2,8 @@
  * ThreatIntelPlugin — IP·해시 위협 평판 표시
  *
  * 사용:
- *   import { ThreatIntelPlugin } from 'trace-scope'
- *   TraceScope.use(ThreatIntelPlugin.configure({
+ *   import { ThreatIntelPlugin } from 'event-lens'
+ *   EventLens.use(ThreatIntelPlugin.configure({
  *     lookup: async (indicator, type) => {
  *       // type: 'ip' | 'hash'
  *       const res = await fetch(`/api/threat-intel?value=${indicator}&type=${type}`)
@@ -39,7 +39,7 @@ function createPlugin(options = {}) {
 
   function renderIndicator(value, type) {
     const wrap = document.createElement('span')
-    wrap.className = 'ts-cell-text ts-threat-cell'
+    wrap.className = 'el-cell-text el-threat-cell'
     wrap.textContent = value || '-'
 
     if (value && lookupFn) {
@@ -47,13 +47,13 @@ function createPlugin(options = {}) {
         if (!result) return
         const dot = document.createElement('span')
         dot.className = result.malicious
-          ? 'ts-threat-dot ts-threat-dot--malicious'
-          : 'ts-threat-dot ts-threat-dot--clean'
+          ? 'el-threat-dot el-threat-dot--malicious'
+          : 'el-threat-dot el-threat-dot--clean'
         const tags = result.tags?.join(', ') || ''
         dot.title = `Score: ${result.score ?? '?'} | ${tags || 'No tags'} | ${result.source || ''}`
         wrap.insertBefore(dot, wrap.firstChild)
         if (result.malicious) {
-          wrap.classList.add('ts-threat-cell--malicious')
+          wrap.classList.add('el-threat-cell--malicious')
         }
       })
     }

@@ -1,7 +1,7 @@
-/* TraceScope — severity badges & row indicators */
+/* EventLens — severity badges & row indicators */
 
 /* ── Badge: dot + colored text, subtle bg ── */
-.ts-badge {
+.el-badge {
   display:        inline-flex;
   align-items:    center;
   gap:            5px;
@@ -16,7 +16,7 @@
   line-height:    1;
 }
 
-.ts-badge::before {
+.el-badge::before {
   content:       '';
   width:         5px;
   height:        5px;
@@ -25,22 +25,22 @@
   flex-shrink:   0;
 }
 
-.ts-badge--critical { color: var(--ts-color-critical); background: var(--ts-badge-bg-critical); }
-.ts-badge--high     { color: var(--ts-color-high);     background: var(--ts-badge-bg-high);     }
-.ts-badge--medium   { color: var(--ts-color-medium);   background: var(--ts-badge-bg-medium);   }
-.ts-badge--low      { color: var(--ts-color-low);      background: var(--ts-badge-bg-low);      }
-.ts-badge--info     { color: var(--ts-color-info);     background: var(--ts-badge-bg-info);     }
-.ts-badge--unknown  { color: var(--ts-color-unknown);  background: var(--ts-badge-bg-unknown);  }
+.el-badge--critical { color: var(--el-color-critical); background: var(--el-badge-bg-critical); }
+.el-badge--high     { color: var(--el-color-high);     background: var(--el-badge-bg-high);     }
+.el-badge--medium   { color: var(--el-color-medium);   background: var(--el-badge-bg-medium);   }
+.el-badge--low      { color: var(--el-color-low);      background: var(--el-badge-bg-low);      }
+.el-badge--info     { color: var(--el-color-info);     background: var(--el-badge-bg-info);     }
+.el-badge--unknown  { color: var(--el-color-unknown);  background: var(--el-badge-bg-unknown);  }
 
 /* ── Row left-border severity stripe ── */
-.ts-row--critical { border-left: 2px solid var(--ts-color-critical); }
-.ts-row--high     { border-left: 2px solid var(--ts-color-high);     }
-.ts-row--medium   { border-left: 2px solid var(--ts-color-medium);   }
-.ts-row--low      { border-left: 2px solid var(--ts-color-low);      }
-.ts-row--info     { border-left: 2px solid var(--ts-color-info);     }
-.ts-row--unknown  { border-left: 2px solid var(--ts-color-unknown);  }
+.el-row--critical { border-left: 2px solid var(--el-color-critical); }
+.el-row--high     { border-left: 2px solid var(--el-color-high);     }
+.el-row--medium   { border-left: 2px solid var(--el-color-medium);   }
+.el-row--low      { border-left: 2px solid var(--el-color-low);      }
+.el-row--info     { border-left: 2px solid var(--el-color-info);     }
+.el-row--unknown  { border-left: 2px solid var(--el-color-unknown);  }
 
 /* Critical row: very faint tint — most other rows have no bg tint */
-.ts-row--critical {
+.el-row--critical {
   background: rgba(224, 82, 82, 0.025);
 }
