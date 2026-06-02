@@ -49,6 +49,7 @@ export class HeaderRenderer {
   _buildCells(onSort) {
     for (const col of this._cm.columns) {
       const cell = el('div', 'el-header-cell', {
+        role:          'columnheader',
         'data-col-id': col.id,
         draggable:     'true',
         style: `width:${col.width}px;min-width:${col.minWidth || 60}px`,
@@ -98,7 +99,8 @@ export class HeaderRenderer {
   }
 
   _appendColumnPicker() {
-    const cell = el('div', 'el-col-picker-cell')
+    const cell = el('div', 'el-col-picker-cell', { role: 'row' })
+    const cellInner = el('div', 'el-col-picker-cell-inner', { role: 'gridcell', style: 'display: contents' })
     const btn  = el('button', 'el-col-picker-btn', {
       type:         'button',
       title:        '컬럼 순서 변경 / 표시·숨기기',
@@ -112,7 +114,8 @@ export class HeaderRenderer {
       this._togglePicker()
     }))
 
-    cell.appendChild(btn)
+    cellInner.appendChild(btn)
+    cell.appendChild(cellInner)
     const container = this._pickerContainer || this._el
     container.appendChild(cell)
     this._pickerBtn = btn

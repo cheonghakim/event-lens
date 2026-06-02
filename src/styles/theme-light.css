@@ -23,8 +23,8 @@
   --el-border-hover:   #888888;
   --el-row-border:     #ebebeb;
   --el-text:           #1a1a1a;
-  --el-text-muted:     #999999;
-  --el-text-secondary: #666666;
+  --el-text-muted:     #6a6a6a; /* improved contrast (>= 4.5:1) */
+  --el-text-secondary: #4c4c4c; /* improved contrast (>= 4.5:1) */
   --el-accent:         #2563eb;
   --el-accent-hover:   #1d4ed8;
 
@@ -44,19 +44,33 @@
 
   /* Severity — slightly darker for light background */
   --el-color-critical: #c43030;
-  --el-color-high:     #b85e18;
-  --el-color-medium:   #8b6a12;
+  --el-color-high:     #9c490a; /* improved contrast (>= 4.5:1) */
+  --el-color-medium:   #7a5a0b; /* improved contrast (>= 4.5:1) */
   --el-color-low:      #2d7a35;
   --el-color-info:     #1a5fb5;
-  --el-color-unknown:  #707070;
+  --el-color-unknown:  #6a6a6a; /* improved contrast (>= 4.5:1) */
+
+  /* Mitre Tactic Colors for light background */
+  --el-tactic-initial-access:      #c43030;
+  --el-tactic-execution:           #9c490a;
+  --el-tactic-persistence:         #7a5a0b;
+  --el-tactic-privilege-escalation:#90306c;
+  --el-tactic-defense-evasion:     #343490;
+  --el-tactic-credential-access:   #c43030;
+  --el-tactic-discovery:           #1a5fb5;
+  --el-tactic-lateral-movement:    #9c490a;
+  --el-tactic-collection:          #2d7a35;
+  --el-tactic-command-control:     #90306c;
+  --el-tactic-exfiltration:        #c43030;
+  --el-tactic-impact:              #c43030;
 
   /* Severity badge backgrounds */
   --el-badge-bg-critical: rgba(196, 48,  48,  0.08);
-  --el-badge-bg-high:     rgba(184, 94,  24,  0.08);
-  --el-badge-bg-medium:   rgba(139, 106, 18,  0.08);
+  --el-badge-bg-high:     rgba(156, 73,  10,  0.08);
+  --el-badge-bg-medium:   rgba(122, 90,  11,  0.08);
   --el-badge-bg-low:      rgba(45,  122, 53,  0.08);
   --el-badge-bg-info:     rgba(26,  95,  181, 0.08);
-  --el-badge-bg-unknown:  rgba(112, 112, 112, 0.08);
+  --el-badge-bg-unknown:  rgba(106, 106, 106, 0.08);
 
   /* Scrollbar */
   --el-scroll-track:       #ececec;

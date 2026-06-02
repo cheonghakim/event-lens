@@ -20,7 +20,7 @@ export class DomRenderBackend extends RenderBackend {
   mount(container) {
     this._container = container
     this._rowPool   = new RowPool(() => el('div', 'el-row', { tabindex: '0', role: 'row' }))
-    this._rowsWrap  = el('div', 'el-rows-container')
+    this._rowsWrap  = el('div', 'el-rows-container', { role: 'none' })
     container.appendChild(this._rowsWrap)
   }
 

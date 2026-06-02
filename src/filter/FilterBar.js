@@ -84,7 +84,7 @@ export class FilterBar {
     this._el.appendChild(this._clearBtn)
 
     // ── Filter chips ──────────────────────────────────────────────────────────
-    this._chips = el('div', 'el-filter-chips', { 'aria-label': '활성 필터' })
+    this._chips = el('div', 'el-filter-chips', { role: 'region', 'aria-label': '활성 필터' })
     this._el.appendChild(this._chips)
 
     // ── Result count ──────────────────────────────────────────────────────────

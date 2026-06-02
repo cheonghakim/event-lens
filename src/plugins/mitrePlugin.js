@@ -15,18 +15,18 @@
  */
 
 const TACTIC_COLORS = {
-  'Initial Access':      '#e05252',
-  'Execution':           '#d07832',
-  'Persistence':         '#b89030',
-  'Privilege Escalation':'#c068a0',
-  'Defense Evasion':     '#6868c0',
-  'Credential Access':   '#e05252',
-  'Discovery':           '#4882c5',
-  'Lateral Movement':    '#d07832',
-  'Collection':          '#4a9e52',
-  'Command and Control': '#c068a0',
-  'Exfiltration':        '#e05252',
-  'Impact':              '#e05252',
+  'Initial Access':      'var(--el-tactic-initial-access, #e05252)',
+  'Execution':           'var(--el-tactic-execution, #d07832)',
+  'Persistence':         'var(--el-tactic-persistence, #b89030)',
+  'Privilege Escalation':'var(--el-tactic-privilege-escalation, #c068a0)',
+  'Defense Evasion':     'var(--el-tactic-defense-evasion, #6868c0)',
+  'Credential Access':   'var(--el-tactic-credential-access, #e05252)',
+  'Discovery':           'var(--el-tactic-discovery, #4882c5)',
+  'Lateral Movement':    'var(--el-tactic-lateral-movement, #d07832)',
+  'Collection':          'var(--el-tactic-collection, #4a9e52)',
+  'Command and Control': 'var(--el-tactic-command-control, #c068a0)',
+  'Exfiltration':        'var(--el-tactic-exfiltration, #e05252)',
+  'Impact':              'var(--el-tactic-impact, #e05252)',
 }
 
 function techniqueTag(tech) {

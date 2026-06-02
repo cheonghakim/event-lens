@@ -6,3 +6,4 @@ docs/
 package-lock.json
 yarn.lock
 .env
+/test-results/

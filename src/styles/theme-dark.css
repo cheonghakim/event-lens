@@ -23,10 +23,10 @@
   --el-border-hover:   #5e5e5e;
   --el-row-border:     #1e1e1e;
   --el-text:           #e2e2e2;
-  --el-text-muted:     #5c5c5c;
-  --el-text-secondary: #8a8a8a;
-  --el-accent:         #2563eb;
-  --el-accent-hover:   #3b82f6;
+  --el-text-muted:     #858585; /* improved contrast (>= 4.5:1) */
+  --el-text-secondary: #b0b0b0; /* improved contrast (>= 4.5:1) */
+  --el-accent:         #4e9cff; /* improved contrast in dark mode (>= 4.5:1) */
+  --el-accent-hover:   #7fb0ff;
 
   /* Header & Panel */
   --el-header-bg:      #141414;
@@ -43,20 +43,34 @@
   --el-log-text:       #c9c9c9;
 
   /* Severity — muted professional palette */
-  --el-color-critical: #e05252;
+  --el-color-critical: #f36b6b; /* improved contrast (>= 4.5:1) */
   --el-color-high:     #d07832;
   --el-color-medium:   #b89030;
   --el-color-low:      #4a9e52;
-  --el-color-info:     #4882c5;
-  --el-color-unknown:  #555555;
+  --el-color-info:     #5294df; /* improved contrast (>= 4.5:1) */
+  --el-color-unknown:  #858585; /* improved contrast (>= 4.5:1) */
+
+  /* Mitre Tactic Colors for dark background */
+  --el-tactic-initial-access:      #f36b6b;
+  --el-tactic-execution:           #d07832;
+  --el-tactic-persistence:         #b89030;
+  --el-tactic-privilege-escalation:#c068a0;
+  --el-tactic-defense-evasion:     #7c7cd0;
+  --el-tactic-credential-access:   #f36b6b;
+  --el-tactic-discovery:           #5294df;
+  --el-tactic-lateral-movement:    #d07832;
+  --el-tactic-collection:          #4a9e52;
+  --el-tactic-command-control:     #c068a0;
+  --el-tactic-exfiltration:        #f36b6b;
+  --el-tactic-impact:              #f36b6b;
 
   /* Severity badge backgrounds */
-  --el-badge-bg-critical: rgba(224, 82,  82,  0.10);
+  --el-badge-bg-critical: rgba(243, 107, 107, 0.10);
   --el-badge-bg-high:     rgba(208, 120, 50,  0.10);
   --el-badge-bg-medium:   rgba(184, 144, 48,  0.10);
   --el-badge-bg-low:      rgba(74,  158, 82,  0.10);
-  --el-badge-bg-info:     rgba(72,  130, 197, 0.10);
-  --el-badge-bg-unknown:  rgba(85,  85,  85,  0.10);
+  --el-badge-bg-info:     rgba(82,  148, 223, 0.10);
+  --el-badge-bg-unknown:  rgba(133, 133, 133, 0.10);
 
   /* Scrollbar */
   --el-scroll-track:       #0a0a0a;

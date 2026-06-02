@@ -48,6 +48,7 @@ export class RowRenderer {
 
     for (const col of this._cm.columns) {
       const cell = el('div', 'el-cell', {
+        role:          'gridcell',
         'data-col-id':  col.id,
         style: `width:${col.width}px;min-width:${col.minWidth || 60}px`,
       })
@@ -62,6 +63,7 @@ export class RowRenderer {
     while (rowEl.firstChild) rowEl.removeChild(rowEl.firstChild)
     for (const col of this._cm.columns) {
       const cell = el('div', 'el-cell', {
+        role:          'gridcell',
         'data-col-id': col.id,
         style: `width:${col.width}px;min-width:${col.minWidth || 60}px`,
       })

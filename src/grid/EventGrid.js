@@ -87,7 +87,7 @@ export class EventGrid {
       'aria-label': '이벤트 목록',
     })
 
-    this._spacer   = el('div', 'el-grid-spacer')
+    this._spacer   = el('div', 'el-grid-spacer', { role: 'none' })
     this._scrollBody.appendChild(this._spacer)
     this._el.appendChild(this._scrollBody)
 
@@ -426,16 +426,24 @@ export class EventGrid {
   }
 
   _moveSelection(delta) {
-    const currentId = this._selection.getSelectedId()
-    const currentEl = this._activeNodes.find(n => n.dataset.eventId === currentId)
-    if (!currentEl) {
+    const activeEl = document.activeElement
+    let idx = this._activeNodes.indexOf(activeEl)
+    if (idx === -1) {
+      const currentId = this._selection.getSelectedId()
+      const currentEl = this._activeNodes.find(n => n.dataset.eventId === currentId)
+      if (currentEl) {
+        idx = this._activeNodes.indexOf(currentEl)
+      }
+    }
+
+    if (idx === -1) {
       const first = this._activeNodes[0]
-      if (first) { this._onRowClick(first); first.focus() }
+      if (first) first.focus()
       return
     }
-    const idx  = this._activeNodes.indexOf(currentEl)
+
     const next = this._activeNodes[idx + delta]
-    if (next) { this._onRowClick(next); next.focus() }
+    if (next) next.focus()
   }
 
   async _onSortChanged(sort) {
