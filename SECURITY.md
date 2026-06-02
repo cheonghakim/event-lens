@@ -1,4 +1,4 @@
-# TraceScope — Security & Operational Policy Guide
+# EventLens — Security & Operational Policy Guide
 
 **보안 및 운영 정책 가이드** · [English](#english) · [한국어](#한국어)
 
@@ -8,7 +8,7 @@
 
 ### Scope
 
-This document covers security considerations for **teams embedding TraceScope in production SOC, SIEM, or SOAR products**. It addresses:
+This document covers security considerations for **teams embedding EventLens in production SOC, SIEM, or SOAR products**. It addresses:
 
 1. [Authentication and token handling](#1-authentication-and-token-handling)
 2. [Content Security Policy](#2-content-security-policy)
@@ -25,7 +25,7 @@ This document covers security considerations for **teams embedding TraceScope in
 
 #### Passing credentials to data source adapters
 
-TraceScope itself does **not** store, manage, or transmit authentication tokens. Tokens are passed through the `headers` option of server-side adapters and forwarded via browser `fetch` or `WebSocket`.
+EventLens itself does **not** store, manage, or transmit authentication tokens. Tokens are passed through the `headers` option of server-side adapters and forwarded via browser `fetch` or `WebSocket`.
 
 ```js
 // REST: Authorization header per request
@@ -40,7 +40,7 @@ const ws = new WebSocketAdapter({
   url: `wss://siem.example.com/events?token=${getAccessToken()}`,
 });
 
-// Rotate on session refresh — no TraceScope restart needed
+// Rotate on session refresh — no EventLens restart needed
 viewer.setDataSource(
   new ServerRangeAdapter({
     url: "/api/events",
@@ -79,7 +79,7 @@ viewer.setDataSource(await authenticatedAdapter());
 
 ### 2. Content Security Policy
 
-TraceScope requires the following CSP directives when deployed on a strict CSP policy.
+EventLens requires the following CSP directives when deployed on a strict CSP policy.
 
 #### Minimum required directives
 
@@ -96,10 +96,10 @@ Content-Security-Policy:
 
 #### Directive explanation
 
-| Directive                   | Why TraceScope needs it                                                                                                                                                                                                             |
+| Directive                   | Why EventLens needs it                                                                                                                                                                                                              |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `style-src 'unsafe-inline'` | CSS custom properties are applied via inline `style` attributes on rows and cells. Without this, density/theme changes that modify inline styles will be blocked.                                                                   |
-| `worker-src 'self' blob:`   | `WorkerBridge` creates a module Worker via `new URL('./DataWorker.js', import.meta.url)`. The `blob:` source is needed when the worker is inlined by some bundlers. If using Vite's default chunking, `'self'` alone is sufficient. |
+| `style-src 'unsafe-inline'` | CSS custom properties are applied via inline `style` attributes on rows and cells. Without this, density/theme changes that modify inline styles will be blocked.                                                                    |
+| `worker-src 'self' blob:`   | `WorkerBridge` creates a module Worker via `new URL('./DataWorker.js', import.meta.url)`. The `blob:` source is needed when the worker is inlined by some bundlers. If using Vite's default chunking, `'self'` alone is sufficient.  |
 | `connect-src`               | Add your SIEM API hostname, WebSocket server (`wss://`), and any GeoIP or threat-intel API endpoints used by plugins.                                                                                                               |
 | `img-src data:`             | Flag emoji in `GeoIpPlugin` uses `String.fromCodePoint` (text, not images), so `data:` is only needed if your app uses data URIs elsewhere.                                                                                         |
 
@@ -115,14 +115,14 @@ If you can set a nonce on scripts, replace `'unsafe-inline'` in `style-src` with
 
 ### 3. PII Masking Policy
 
-TraceScope renders whatever data is passed in the `dataSource`. Your data pipeline is responsible for masking PII before it reaches the client. TraceScope's `MaskingPlugin` provides a **secondary display-layer mask** and should not be the sole PII control.
+EventLens renders whatever data is passed in the `dataSource`. Your data pipeline is responsible for masking PII before it reaches the client. EventLens's `MaskingPlugin` provides a **secondary display-layer mask** and should not be the sole PII control.
 
 #### Recommended masking strategy
 
 ```
 Data Pipeline (server) → Primary PII masking
       ↓
-TraceScope MaskingPlugin  → Display-layer masking (secondary)
+EventLens MaskingPlugin  → Display-layer masking (secondary)
 ```
 
 #### MaskingPlugin configuration for common deployments
@@ -130,9 +130,9 @@ TraceScope MaskingPlugin  → Display-layer masking (secondary)
 **SOC Tier 1 (unauthenticated analysts)**
 
 ```js
-import { MaskingPlugin } from "trace-scope";
+import { MaskingPlugin } from "event-lens";
 
-TraceScope.use(
+EventLens.use(
   MaskingPlugin.configure({
     fields: ["user", "src_ip", "dst_ip", "email", "session_id"],
     pattern: "***",
@@ -144,7 +144,7 @@ TraceScope.use(
 **SOC Tier 2/3 (senior analysts with data access)**
 
 ```js
-TraceScope.use(
+EventLens.use(
   MaskingPlugin.configure({
     fields: ["user", "email"],
     pattern: "***",
@@ -180,12 +180,12 @@ import {
   CachedServerRangeAdapter,
   ServerRangeAdapter,
   ChunkCache,
-} from "trace-scope";
+} from "event-lens";
 
 const adapter = new CachedServerRangeAdapter(
   new ServerRangeAdapter({ url: "/api/events" }),
   {
-    dbName: "trace-scope-events",
+    dbName: "event-lens-events",
     ttl: 2 * 60 * 1000, // 2 minutes (default)
   },
 );
@@ -197,8 +197,8 @@ const adapter = new CachedServerRangeAdapter(
 | ------------------ | ----------------------------------------------------------------------------------------------- |
 | TTL expiry         | Entry evicted on next read; no background sweep                                                 |
 | Filter/sort change | Cache cleared automatically (`CachedServerRangeAdapter.applyFilter()` calls `cache.clear()`)    |
-| Manual clear       | `cache.clear()` evicts all entries; `cache.evictExpired()` evicts stale entries                 |
-| User logout        | Call `adapter.destroy()` or manually clear with `indexedDB.deleteDatabase('trace-scope-events')` |
+| Manual clear       | `cache.clear()` evicts all entries; `cache.evictExpired()` evicts stale entries                  |
+| User logout        | Call `adapter.destroy()` or manually clear with `indexedDB.deleteDatabase('event-lens-events')`  |
 
 **Recommendation:** Clear the IndexedDB database on user logout or session expiry.
 
@@ -224,10 +224,10 @@ The `LiveController` retains events in the data source's in-memory array up to `
 To disable export entirely, do not register `ExportPlugin`. To restrict by role:
 
 ```js
-import { ExportPlugin } from "trace-scope";
+import { ExportPlugin } from "event-lens";
 
 if (userHasPermission("export_events")) {
-  TraceScope.use(ExportPlugin);
+  EventLens.use(ExportPlugin);
 }
 ```
 
@@ -258,7 +258,7 @@ viewer.on("event:action", ({ actionId, event }) => {
 
 ### 6. Browser Support Matrix
 
-TraceScope requires modern browsers. No polyfills are included.
+EventLens requires modern browsers. No polyfills are included.
 
 | Browser             | Minimum version | Notes                                                     |
 | ------------------- | --------------- | --------------------------------------------------------- |
@@ -281,7 +281,7 @@ TraceScope requires modern browsers. No polyfills are included.
 | `WebSocket`             | `WebSocketAdapter`                                            |
 | `CSS Custom Properties` | Theme system; all supported browsers above support this       |
 
-**Internet Explorer:** Not supported. TraceScope uses ES modules, `import.meta.url`, optional chaining, and nullish coalescing throughout.
+**Internet Explorer:** Not supported. EventLens uses ES modules, `import.meta.url`, optional chaining, and nullish coalescing throughout.
 
 ---
 
@@ -340,7 +340,7 @@ Include:
 
 - A description of the vulnerability
 - Steps to reproduce
-- Affected TraceScope version and browser
+- Affected EventLens version and browser
 - Potential impact assessment
 
 We aim to acknowledge reports within 3 business days and publish patches within 30 days of confirmation.
@@ -351,13 +351,13 @@ We aim to acknowledge reports within 3 business days and publish patches within 
 
 ### 적용 범위
 
-이 문서는 **TraceScope를 SOC, SIEM, SOAR 제품에 임베딩하는 팀**을 위한 운영 보안 정책 가이드입니다.
+이 문서는 **EventLens를 SOC, SIEM, SOAR 제품에 임베딩하는 팀**을 위한 운영 보안 정책 가이드입니다.
 
 ---
 
 ### 1. 인증 및 토큰 처리
 
-TraceScope 자체는 인증 토큰을 저장·관리·전송하지 않습니다. 토큰은 어댑터 생성 시 `headers` 옵션으로 전달되고, 각 `fetch` 또는 WebSocket 연결에 그대로 사용됩니다.
+EventLens 자체는 인증 토큰을 저장·관리·전송하지 않습니다. 토큰은 어댑터 생성 시 `headers` 옵션으로 전달되고, 각 `fetch` 또는 WebSocket 연결에 그대로 사용됩니다.
 
 ```js
 // REST 어댑터에 Bearer 토큰 전달
@@ -367,7 +367,7 @@ const adapter = new ServerRangeAdapter({
   credentials: "same-origin",
 });
 
-// 세션 갱신 시 어댑터만 교체 — TraceScope 재시작 불필요
+// 세션 갱신 시 어댑터만 교체 — EventLens 재시작 불필요
 viewer.setDataSource(
   new ServerRangeAdapter({
     url: "/api/events",
@@ -408,14 +408,14 @@ Content-Security-Policy:
 
 ### 3. PII 마스킹 정책
 
-TraceScope는 `dataSource`에 전달된 데이터를 그대로 화면에 표시합니다. **데이터 파이프라인(서버 측)에서 PII를 1차 마스킹한 후** TraceScope에 전달하는 것을 원칙으로 합니다. `MaskingPlugin`은 디스플레이 레이어의 2차 마스킹 역할입니다.
+EventLens는 `dataSource`에 전달된 데이터를 그대로 화면에 표시합니다. **데이터 파이프라인(서버 측)에서 PII를 1차 마스킹한 후** EventLens에 전달하는 것을 원칙으로 합니다. `MaskingPlugin`은 디스플레이 레이어의 2차 마스킹 역할입니다.
 
 **권장 마스킹 계층:**
 
 ```
 데이터 파이프라인 → 1차 PII 마스킹 (서버 측)
        ↓
-TraceScope MaskingPlugin → 2차 디스플레이 마스킹
+EventLens MaskingPlugin → 2차 디스플레이 마스킹
 ```
 
 **SOC 1·2 Tier 배포 예시:**
@@ -450,7 +450,7 @@ viewer.emit("masking:toggle", { enabled: userRole !== "senior" });
 ```js
 const adapter = new CachedServerRangeAdapter(
   new ServerRangeAdapter({ url: "/api/events" }),
-  { dbName: "trace-scope-events", ttl: 2 * 60 * 1000 }, // 2분 TTL
+  { dbName: "event-lens-events", ttl: 2 * 60 * 1000 }, // 2분 TTL
 );
 ```
 
@@ -458,7 +458,7 @@ const adapter = new CachedServerRangeAdapter(
 | -------------- | ----------------------------------------------------------------------------- |
 | TTL 만료       | 다음 읽기 시 자동 제거                                                        |
 | 필터/정렬 변경 | 자동 전체 삭제                                                                |
-| 로그아웃       | `adapter.destroy()` 호출 또는 `indexedDB.deleteDatabase('trace-scope-events')` |
+| 로그아웃       | `adapter.destroy()` 호출 또는 `indexedDB.deleteDatabase('event-lens-events')` |
 
 **권장사항:** 사용자 로그아웃 또는 세션 만료 시 반드시 IndexedDB 데이터베이스를 삭제하세요.
 
@@ -479,7 +479,7 @@ const adapter = new CachedServerRangeAdapter(
 
 ```js
 if (userHasPermission("export_events")) {
-  TraceScope.use(ExportPlugin);
+  EventLens.use(ExportPlugin);
 }
 ```
 

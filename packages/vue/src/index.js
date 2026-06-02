@@ -1,1 +1,1 @@
-export { default as TraceScope } from './TraceScope.vue'
+export { default as EventLens } from './EventLens.vue'

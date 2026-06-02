@@ -1,14 +1,14 @@
 {
-  "name": "@trace-scope/svelte",
+  "name": "@event-lens/svelte",
   "version": "0.1.0",
-  "description": "Svelte wrapper for TraceScope",
+  "description": "Svelte wrapper for EventLens",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "svelte": "./src/TraceScope.svelte",
+      "svelte": "./src/EventLens.svelte",
       "types":  "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require":"./dist/index.cjs"
@@ -17,7 +17,7 @@
   "files": ["dist", "src"],
   "peerDependencies": {
     "svelte":    ">=4.0.0",
-    "trace-scope": ">=0.1.0"
+    "event-lens": ">=0.1.0"
   },
   "devDependencies": {
     "svelte":          "^4.0.0",

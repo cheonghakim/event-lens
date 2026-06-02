@@ -1,24 +1,24 @@
-# @trace-scope/react
+# @event-lens/react
 
-React wrapper for [TraceScope](../../README.md).
+React wrapper for [EventLens](../../README.md).
 
 ## Installation / 설치
 
 ```bash
-npm install trace-scope @trace-scope/react
+npm install event-lens @event-lens/react
 ```
 
 ## Usage / 사용법
 
 ```jsx
-import { TraceScopeViewer } from '@trace-scope/react'
+import { EventLensViewer } from '@event-lens/react'
 
 export function Dashboard() {
   const viewerRef = useRef(null)
 
   return (
     <div style={{ height: '100vh' }}>
-      <TraceScopeViewer
+      <EventLensViewer
         ref={viewerRef}
         dataSource={events}
         theme="dark"
@@ -36,7 +36,7 @@ export function Dashboard() {
 
 ## Props
 
-All [TraceScopeOptions](../../README.md#options-reference--옵션-레퍼런스) are available as props. Event callbacks use camelCase: `onEventSelected`, `onFilterChanged`, etc.
+All [EventLensOptions](../../README.md#options-reference--옵션-레퍼런스) are available as props. Event callbacks use camelCase: `onEventSelected`, `onFilterChanged`, etc.
 
 ## Ref Methods
 

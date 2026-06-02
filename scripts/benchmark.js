@@ -1,5 +1,5 @@
 /**
- * TraceScope benchmark scenarios
+ * EventLens benchmark scenarios
  * Run: node scripts/benchmark.js
  *
  * Measures:
@@ -37,7 +37,7 @@ function bench(label, fn, iterations = 1) {
   console.log(`${icon}  ${label.padEnd(50)} ${avg.toFixed(1).padStart(7)}ms`)
 }
 
-console.log('\n══ TraceScope Benchmark ══════════════════════════════')
+console.log('\n══ EventLens Benchmark ══════════════════════════════')
 console.log(`  Node ${process.version}  ${new Date().toISOString()}\n`)
 
 const events500k = makeEvents(500_000)

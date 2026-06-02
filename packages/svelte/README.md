@@ -1,25 +1,25 @@
-# @trace-scope/svelte
+# @event-lens/svelte
 
-Svelte wrapper for [TraceScope](../../README.md).
+Svelte wrapper for [EventLens](../../README.md).
 
 ## Installation / 설치
 
 ```bash
-npm install trace-scope @trace-scope/svelte
+npm install event-lens @event-lens/svelte
 ```
 
 ## Usage / 사용법
 
 ```svelte
 <script>
-  import TraceScope from '@trace-scope/svelte/src/TraceScope.svelte'
+  import EventLens from '@event-lens/svelte/src/EventLens.svelte'
   let viewer
 
   const events = [...]
 </script>
 
 <div style="height: 100vh">
-  <TraceScope
+  <EventLens
     bind:this={viewer}
     dataSource={events}
     theme="dark"

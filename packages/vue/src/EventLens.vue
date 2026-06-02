@@ -1,11 +1,11 @@
 <template>
-  <div ref="containerRef" class="trace-scope-vue-wrapper" />
+  <div ref="containerRef" class="event-lens-vue-wrapper" />
 </template>
 
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount, toRaw } from 'vue'
-import { TraceScope } from 'trace-scope'
-import 'trace-scope/style'
+import { EventLens } from 'event-lens'
+import 'event-lens/style'
 
 const props = defineProps({
   dataSource:     { required: true },
@@ -44,7 +44,7 @@ const EVENTS = [
 function createViewer() {
   if (_viewer) { _viewer.destroy(); _viewer = null }
 
-  _viewer = new TraceScope({
+  _viewer = new EventLens({
     container:      containerRef.value,
     dataSource:     toRaw(props.dataSource),
     columns:        props.columns ? toRaw(props.columns) : undefined,
@@ -76,16 +76,15 @@ watch(() => props.dataSource, (ds) => {
 })
 
 watch(() => props.theme, (t) => {
-  if (_viewer?._rootEl) _viewer._rootEl.dataset.tsTheme = t
+  if (_viewer?._rootEl) _viewer._rootEl.dataset.elTheme = t
 })
 
 watch(() => props.density, (d) => {
-  if (_viewer?._rootEl) _viewer._rootEl.dataset.tsDensity = d
+  if (_viewer?._rootEl) _viewer._rootEl.dataset.elDensity = d
 })
 
-// Expose viewer instance for advanced use
 defineExpose({
-  viewer: () => _viewer,
+  viewer:         () => _viewer,
   refresh:        ()  => _viewer?.refresh(),
   applyFilter:    (f) => _viewer?.applyFilter(f),
   clearFilter:    ()  => _viewer?.clearFilter(),
@@ -99,7 +98,7 @@ defineExpose({
 </script>
 
 <style scoped>
-.trace-scope-vue-wrapper {
+.event-lens-vue-wrapper {
   width:  100%;
   height: 100%;
 }

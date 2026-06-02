@@ -1,1 +1,1 @@
-export { TraceScopeViewer, default } from './TraceScopeReact.jsx'
+export { EventLensViewer, default } from './EventLensReact.jsx'

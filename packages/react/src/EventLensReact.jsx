@@ -1,19 +1,19 @@
 import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react'
-import { TraceScope } from 'trace-scope'
-import 'trace-scope/style'
+import { EventLens } from 'event-lens'
+import 'event-lens/style'
 
 /**
- * React wrapper for TraceScope.
+ * React wrapper for EventLens.
  *
  * @example
- * <TraceScopeViewer
+ * <EventLensViewer
  *   dataSource={events}
  *   theme="dark"
  *   density="normal"
  *   onEventSelected={({ event }) => console.log(event)}
  * />
  */
-const TraceScopeViewer = forwardRef(function TraceScopeViewer(props, ref) {
+const EventLensViewer = forwardRef(function EventLensViewer(props, ref) {
   const {
     dataSource,
     columns,
@@ -45,7 +45,7 @@ const TraceScopeViewer = forwardRef(function TraceScopeViewer(props, ref) {
   useEffect(() => {
     if (!containerRef.current) return
 
-    const viewer = new TraceScope({
+    const viewer = new EventLens({
       container:      containerRef.current,
       dataSource,
       columns,
@@ -85,13 +85,13 @@ const TraceScopeViewer = forwardRef(function TraceScopeViewer(props, ref) {
   // Theme change
   useEffect(() => {
     const v = viewerRef.current
-    if (v?._rootEl) v._rootEl.dataset.tsTheme = theme
+    if (v?._rootEl) v._rootEl.dataset.elTheme = theme
   }, [theme])
 
   // Density change
   useEffect(() => {
     const v = viewerRef.current
-    if (v?._rootEl) v._rootEl.dataset.tsDensity = density
+    if (v?._rootEl) v._rootEl.dataset.elDensity = density
   }, [density])
 
   useImperativeHandle(ref, () => ({
@@ -110,11 +110,11 @@ const TraceScopeViewer = forwardRef(function TraceScopeViewer(props, ref) {
   return (
     <div
       ref={containerRef}
-      className={['trace-scope-react-wrapper', className].filter(Boolean).join(' ')}
+      className={['event-lens-react-wrapper', className].filter(Boolean).join(' ')}
       style={{ width: '100%', height: '100%', ...style }}
     />
   )
 })
 
-export { TraceScopeViewer }
-export default TraceScopeViewer
+export { EventLensViewer }
+export default EventLensViewer

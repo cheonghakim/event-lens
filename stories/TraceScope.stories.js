@@ -1,6 +1,6 @@
-import { TraceScope, ExportPlugin } from '../src/index.js'
+import { EventLens, ExportPlugin } from '../src/index.js'
 
-TraceScope.use(ExportPlugin)
+EventLens.use(ExportPlugin)
 
 // Sample data generator
 function makeEvents(count = 100) {
@@ -33,7 +33,7 @@ function makeEvents(count = 100) {
 }
 
 export default {
-  title:     'TraceScope / EventGrid',
+  title:     'EventLens / EventGrid',
   tags:      ['autodocs'],
   argTypes: {
     theme:   { control: 'select', options: ['dark', 'light'] },
@@ -51,7 +51,7 @@ export const Default = {
     const div = document.createElement('div')
     div.style.cssText = 'width:100%;height:100vh'
 
-    const viewer = new TraceScope({
+    const viewer = new EventLens({
       container: div,
       dataSource: makeEvents(count),
       theme,
@@ -93,7 +93,7 @@ export const WithGrouping = {
     const div = document.createElement('div')
     div.style.cssText = 'width:100%;height:100vh'
 
-    new TraceScope({
+    new EventLens({
       container: div,
       dataSource: makeEvents(count),
       theme,
@@ -112,7 +112,7 @@ export const WithHighlightRules = {
     const div = document.createElement('div')
     div.style.cssText = 'width:100%;height:100vh'
 
-    new TraceScope({
+    new EventLens({
       container: div,
       dataSource: makeEvents(count),
       theme,

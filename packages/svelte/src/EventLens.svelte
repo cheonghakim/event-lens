@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-  import { TraceScope } from 'trace-scope'
-  import 'trace-scope/style'
+  import { EventLens } from 'event-lens'
+  import 'event-lens/style'
 
   // Props
   export let dataSource
@@ -28,7 +28,7 @@
   ]
 
   onMount(() => {
-    _viewer = new TraceScope({
+    _viewer = new EventLens({
       container,
       dataSource,
       columns,
@@ -55,8 +55,8 @@
 
   // Reactive updates
   $: if (_viewer && dataSource !== undefined) _viewer.setDataSource(dataSource)
-  $: if (_viewer?._rootEl && theme)   _viewer._rootEl.dataset.tsTheme   = theme
-  $: if (_viewer?._rootEl && density) _viewer._rootEl.dataset.tsDensity = density
+  $: if (_viewer?._rootEl && theme)   _viewer._rootEl.dataset.elTheme   = theme
+  $: if (_viewer?._rootEl && density) _viewer._rootEl.dataset.elDensity = density
 
   // Expose imperative API
   export function refresh()        { return _viewer?.refresh() }
@@ -71,10 +71,10 @@
   export function getViewer()      { return _viewer }
 </script>
 
-<div bind:this={container} class="trace-scope-svelte-wrapper" />
+<div bind:this={container} class="event-lens-svelte-wrapper" />
 
 <style>
-  .trace-scope-svelte-wrapper {
+  .event-lens-svelte-wrapper {
     width:  100%;
     height: 100%;
   }

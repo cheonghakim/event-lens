@@ -1,18 +1,18 @@
-# @trace-scope/vue
+# @event-lens/vue
 
-Vue 3 wrapper component for [TraceScope](../../README.md).
+Vue 3 wrapper component for [EventLens](../../README.md).
 
 ## Installation / 설치
 
 ```bash
-npm install trace-scope @trace-scope/vue
+npm install event-lens @event-lens/vue
 ```
 
 ## Usage / 사용법
 
 ```vue
 <template>
-  <TraceScope
+  <EventLens
     :data-source="events"
     theme="dark"
     density="normal"
@@ -27,7 +27,7 @@ npm install trace-scope @trace-scope/vue
 </template>
 
 <script setup>
-import { TraceScope } from '@trace-scope/vue'
+import { EventLens } from '@event-lens/vue'
 
 const events = ref([...])
 const columns = [
@@ -44,18 +44,18 @@ function onSelect({ event }) {
 
 ## Props
 
-All [TraceScopeOptions](../../README.md#options-reference--옵션-레퍼런스) are available as props.
+All [EventLensOptions](../../README.md#options-reference--옵션-레퍼런스) are available as props.
 
 ## Events
 
-All TraceScope events are forwarded: `event:selected`, `event:deselected`, `event:action`, `live:new-events`, `live:connected`, `live:disconnected`, `filter:changed`, `sort:changed`.
+All EventLens events are forwarded: `event:selected`, `event:deselected`, `event:action`, `live:new-events`, `live:connected`, `live:disconnected`, `filter:changed`, `sort:changed`.
 
 ## Exposed Methods
 
 Access via template ref:
 
 ```vue
-<TraceScope ref="viewer" ... />
+<EventLens ref="viewer" ... />
 
 <script setup>
 const viewer = ref(null)

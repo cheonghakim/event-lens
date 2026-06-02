@@ -1,5 +1,5 @@
 /**
- * GeoLite2 CSV → TraceScope GeoIP JSON 변환 스크립트
+ * GeoLite2 CSV → EventLens GeoIP JSON 변환 스크립트
  *
  * 사전 준비:
  *   1. https://www.maxmind.com/en/geolite2/signup 에서 무료 계정 생성

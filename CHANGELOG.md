@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to TraceScope are documented here.  
+All notable changes to EventLens are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).  
 Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -10,7 +10,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - `clearSelection()` public API method
-- `worker` option added to TypeScript `TraceScopeOptions` type
+- `worker` option added to TypeScript `EventLensOptions` type
 
 ### Fixed
 - `setDataSource()` now correctly re-wraps the new adapter in `WorkerBridge` when `worker` mode is enabled
@@ -55,4 +55,4 @@ Initial public release.
 - Professional color palette with severity badges (dot + text, no emoji)
 
 ### Phase 4 — Plugin Ecosystem (initial)
-- `ExportPlugin` — CSV / JSON / JSONL export via `TraceScope.use(ExportPlugin)`
+- `ExportPlugin` — CSV / JSON / JSONL export via `EventLens.use(ExportPlugin)`

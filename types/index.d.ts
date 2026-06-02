@@ -1,4 +1,4 @@
-// TraceScope — TypeScript type definitions
+// EventLens — TypeScript type definitions
 
 export type Severity = 'critical' | 'high' | 'medium' | 'low' | 'info' | 'unknown'
 export type Theme    = 'dark' | 'light' | 'auto'
@@ -117,7 +117,7 @@ export interface EventSort {
 
 // ── EventAction ───────────────────────────────────────────────────────────────
 export interface ActionContext {
-  viewer: TraceScope
+  viewer: EventLens
   emit:   (event: string, data: unknown) => void
 }
 
@@ -160,10 +160,10 @@ export interface PluginContext {
   registerColumnDecorator(columnId: string, decorator: (el: HTMLElement, event: SecurityEvent) => void): void
   on(event: string, cb: (data: unknown) => void): void
   emit(event: string, data: unknown): void
-  getOptions(): TraceScopeOptions
+  getOptions(): EventLensOptions
 }
 
-export interface TraceScopePlugin {
+export interface EventLensPlugin {
   name:    string
   install: (ctx: PluginContext) => void
 }
@@ -246,7 +246,7 @@ export interface SSEAdapterOptions {
   messageMapper?: (data: string) => SecurityEvent[] | SecurityEvent | null
 }
 
-export interface TraceScopeOptions {
+export interface EventLensOptions {
   container:        string | HTMLElement
   dataSource:       DataSourceInput
   columns?:         EventColumn[]
@@ -259,20 +259,20 @@ export interface TraceScopeOptions {
   detail?:          DetailOptions | boolean
   highlightRules?:  HighlightRule[]
   actions?:         EventAction[]
-  plugins?:         TraceScopePlugin[]
+  plugins?:         EventLensPlugin[]
   locale?:          string
   worker?:          WorkerOptions | boolean
 }
 
-// ── TraceScope class ──────────────────────────────────────────────────────────
-export declare class TraceScope {
-  constructor(options: TraceScopeOptions)
+// ── EventLens class ──────────────────────────────────────────────────────────
+export declare class EventLens {
+  constructor(options: EventLensOptions)
 
   /** Install a plugin globally (before any instance is created) */
-  static use(plugin: TraceScopePlugin): typeof TraceScope
+  static use(plugin: EventLensPlugin): typeof EventLens
 
   /** Instance-level plugin install */
-  use(plugin: TraceScopePlugin): this
+  use(plugin: EventLensPlugin): this
 
   on(event: 'event:selected',      cb: (data: { event: SecurityEvent }) => void): this
   on(event: 'event:deselected',    cb: (data: { eventId: string }) => void): this
@@ -361,21 +361,21 @@ export declare class CachedServerRangeAdapter implements EventDataSource {
   constructor(adapter: ServerRangeAdapter, options?: { dbName?: string; ttl?: number })
 }
 
-export declare const ExportPlugin: TraceScopePlugin
-export declare const GeoIpPlugin: TraceScopePlugin & {
-  configure(options?: Record<string, unknown>): TraceScopePlugin
+export declare const ExportPlugin: EventLensPlugin
+export declare const GeoIpPlugin: EventLensPlugin & {
+  configure(options?: Record<string, unknown>): EventLensPlugin
 }
-export declare const ThreatIntelPlugin: TraceScopePlugin & {
-  configure(options?: Record<string, unknown>): TraceScopePlugin
+export declare const ThreatIntelPlugin: EventLensPlugin & {
+  configure(options?: Record<string, unknown>): EventLensPlugin
 }
-export declare const MitrePlugin: TraceScopePlugin & {
-  configure(options?: Record<string, unknown>): TraceScopePlugin
+export declare const MitrePlugin: EventLensPlugin & {
+  configure(options?: Record<string, unknown>): EventLensPlugin
 }
-export declare const MaskingPlugin: TraceScopePlugin & {
-  configure(options?: Record<string, unknown>): TraceScopePlugin
+export declare const MaskingPlugin: EventLensPlugin & {
+  configure(options?: Record<string, unknown>): EventLensPlugin
 }
-export declare const SoarPlugin: TraceScopePlugin & {
-  configure(options?: Record<string, unknown>): TraceScopePlugin
+export declare const SoarPlugin: EventLensPlugin & {
+  configure(options?: Record<string, unknown>): EventLensPlugin
 }
 
 export declare class RenderBackend {}

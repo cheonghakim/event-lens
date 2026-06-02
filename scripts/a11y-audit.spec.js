@@ -1,5 +1,5 @@
 /**
- * TraceScope — axe-core accessibility audit
+ * EventLens — axe-core accessibility audit
  *
  * Run:
  *   npm run a11y:install   (first time only — downloads Chromium)
@@ -20,7 +20,7 @@
 import { test, expect }     from '@playwright/test'
 import { checkA11y, injectAxe, getViolations } from 'axe-playwright'
 
-const BASE = '/trace-scope/'
+const BASE = '/event-lens/'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -55,11 +55,11 @@ async function auditPage(page, label) {
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
-test.describe('TraceScope — WCAG 2.1 AA audit', () => {
+test.describe('EventLens — WCAG 2.1 AA audit', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(BASE)
     // Wait for the grid to render at least one row
-    await page.waitForSelector('.ts-row', { timeout: 10000 })
+    await page.waitForSelector('.el-row', { timeout: 10000 })
     await injectAxe(page)
   })
 
@@ -75,44 +75,41 @@ test.describe('TraceScope — WCAG 2.1 AA audit', () => {
   })
 
   test('event row selected — detail panel open, parsedFields tab', async ({ page }) => {
-    // Click first visible row
-    const firstRow = page.locator('.ts-row').first()
+    const firstRow = page.locator('.el-row').first()
     await firstRow.click()
-    await page.waitForSelector('.ts-detail-panel--open', { timeout: 5000 })
+    await page.waitForSelector('.el-detail-panel--open', { timeout: 5000 })
     await page.waitForTimeout(300)
     await auditPage(page, 'Detail panel — parsedFields')
   })
 
   test('detail panel — raw log tab', async ({ page }) => {
-    const firstRow = page.locator('.ts-row').first()
+    const firstRow = page.locator('.el-row').first()
     await firstRow.click()
-    await page.waitForSelector('.ts-detail-panel--open', { timeout: 5000 })
+    await page.waitForSelector('.el-detail-panel--open', { timeout: 5000 })
 
-    // Click the raw log tab
-    const rawLogTab = page.locator('.ts-tab-btn', { hasText: '원문' })
+    const rawLogTab = page.locator('.el-tab-btn', { hasText: '원문' })
     await rawLogTab.click()
     await page.waitForTimeout(200)
     await auditPage(page, 'Detail panel — rawLog tab')
   })
 
   test('detail panel — timeline tab', async ({ page }) => {
-    const firstRow = page.locator('.ts-row').first()
+    const firstRow = page.locator('.el-row').first()
     await firstRow.click()
-    await page.waitForSelector('.ts-detail-panel--open', { timeout: 5000 })
+    await page.waitForSelector('.el-detail-panel--open', { timeout: 5000 })
 
-    const timelineTab = page.locator('.ts-tab-btn', { hasText: '이력' })
+    const timelineTab = page.locator('.el-tab-btn', { hasText: '이력' })
     await timelineTab.click()
     await page.waitForTimeout(200)
     await auditPage(page, 'Detail panel — timeline tab')
   })
 
   test('keyboard navigation — arrow keys, Enter, Escape', async ({ page }) => {
-    // Focus the grid body
-    await page.locator('.ts-grid-body').click()
+    await page.locator('.el-grid-body').click()
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('Enter')
-    await page.waitForSelector('.ts-detail-panel--open', { timeout: 5000 })
+    await page.waitForSelector('.el-detail-panel--open', { timeout: 5000 })
     await page.keyboard.press('Escape')
     await page.waitForTimeout(200)
     await auditPage(page, 'Keyboard navigation')

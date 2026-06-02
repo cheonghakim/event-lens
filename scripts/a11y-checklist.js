@@ -38,7 +38,7 @@ const ARIA_CHECKLIST = [
 const done  = ARIA_CHECKLIST.filter(i => i.done)
 const todo  = ARIA_CHECKLIST.filter(i => !i.done)
 
-console.log('\n══ TraceScope Accessibility Audit Checklist ══════════')
+console.log('\n══ EventLens Accessibility Audit Checklist ══════════')
 console.log(`  ${done.length}/${ARIA_CHECKLIST.length} items implemented\n`)
 
 for (const item of done) {

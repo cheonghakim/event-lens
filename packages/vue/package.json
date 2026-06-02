@@ -1,7 +1,7 @@
 {
-  "name": "@trace-scope/vue",
+  "name": "@event-lens/vue",
   "version": "0.1.0",
-  "description": "Vue 3 wrapper for TraceScope",
+  "description": "Vue 3 wrapper for EventLens",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -16,7 +16,7 @@
   "files": ["dist"],
   "peerDependencies": {
     "vue": "^3.0.0",
-    "trace-scope": ">=0.1.0"
+    "event-lens": ">=0.1.0"
   },
   "devDependencies": {
     "vue": "^3.4.0",

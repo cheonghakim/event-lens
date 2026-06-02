@@ -7,7 +7,7 @@ import './styles/theme-light.css'
 import './styles/theme-dark.css'
 
 // ── Core ─────────────────────────────────────────────────────────────────────
-export { EventLens }         from './core/TraceScope.js'
+export { EventLens }         from './core/EventLens.js'
 export { EventBus }          from './core/EventBus.js'
 
 // ── Phase 1: Data sources ─────────────────────────────────────────────────────
