@@ -73,7 +73,8 @@ export class EventGrid {
     this._header     = new HeaderRenderer(this._cm)
     const headerEl   = this._header.render(
       (sort) => this._bus.emit('sort:changed', sort),
-      ()     => this._rebuildAfterColumnChange()
+      ()     => this._rebuildAfterColumnChange(),
+      this._headerWrap
     )
     this._headerWrap.appendChild(headerEl)
     this._el.appendChild(this._headerWrap)

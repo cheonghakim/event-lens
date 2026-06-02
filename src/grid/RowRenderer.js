@@ -132,7 +132,9 @@ export class RowRenderer {
                 : pct >= 40 ? 'var(--el-color-medium)'
                 :              'var(--el-color-low)'
     return `<span class="el-risk-bar" title="${pct}">
-      <span class="el-risk-fill" style="width:${pct}%;background:${color}"></span>
+      <span style="flex:1;min-width:0;height:3px;border-radius:2px;background:var(--el-bg-alt);overflow:hidden">
+        <span style="display:block;width:${pct}%;height:3px;border-radius:2px;background:${color}"></span>
+      </span>
       <span class="el-risk-text">${pct}</span>
     </span>`
   }

@@ -16,7 +16,7 @@ export default defineConfig({
 
   // Run demo preview server before tests
   webServer: {
-    command:  'npm run build:demo && npx vite preview --config vite.demo.config.js --port 4173',
+    command:  'npx vite preview --config vite.demo.config.js --port 4173',
     url:      'http://localhost:4173/event-lens/',
     timeout:  60000,
     reuseExistingServer: !process.env.CI,

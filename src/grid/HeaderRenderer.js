@@ -11,9 +11,10 @@ export class HeaderRenderer {
     this._cleanups = []
   }
 
-  render(onSort, onColumnChange) {
+  render(onSort, onColumnChange, pickerContainer) {
     this._el = el('div', 'el-grid-header', { role: 'row', 'aria-label': '컬럼 헤더' })
-    this._onColumnChange = onColumnChange
+    this._onColumnChange  = onColumnChange
+    this._pickerContainer = pickerContainer || null
 
     this._buildCells(onSort)
     this._appendColumnPicker()
@@ -23,12 +24,9 @@ export class HeaderRenderer {
 
   updateAll(onSort) {
     if (!this._el) return
-    // Remove all cells except column picker cell
-    const picker = this._el.querySelector('.el-col-picker-cell')
     while (this._el.firstChild) this._el.removeChild(this._el.firstChild)
     this._buildCells(onSort)
-    if (picker) this._el.appendChild(picker)
-    else this._appendColumnPicker()
+    // 피커 셀은 pickerContainer에 있으므로 재삽입 불필요
   }
 
   updateColumnWidth(col) {
@@ -115,7 +113,8 @@ export class HeaderRenderer {
     }))
 
     cell.appendChild(btn)
-    this._el.appendChild(cell)
+    const container = this._pickerContainer || this._el
+    container.appendChild(cell)
     this._pickerBtn = btn
   }
 

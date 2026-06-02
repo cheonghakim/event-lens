@@ -153,15 +153,15 @@
 
 .el-col-picker-cell {
   padding: 0 8px;
-  flex-shrink: 0;
   display: flex;
   align-items: center;
-  border-right: none;
   border-left: 1px solid var(--el-border);
-  position: sticky;
+  position: absolute;
   right: 0;
+  top: 0;
+  height: 100%;
   background: var(--el-header-bg);
-  z-index: 1;
+  z-index: 3;
 }
 
 .el-col-picker-btn {
@@ -211,31 +211,30 @@
 .el-row[data-soar-status="done"]    { border-left-color: #52c41a; }
 .el-row[data-soar-status="error"]   { border-left-color: #e05252; }
 
-.el-soar-badge {
-  position: sticky;
-  right: 8px;
-  flex-shrink: 0;
-  margin-left: auto;
+/* SOAR status column cell */
+.el-soar-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 10px;
   font-weight: 600;
-  padding: 1px 7px;
+  padding: 1px 6px;
   border-radius: 3px;
-  pointer-events: none;
   white-space: nowrap;
   letter-spacing: 0.2px;
 }
-.el-soar-badge--running {
+.el-soar-status--running {
   background: #faad1420;
   color: #faad14;
   border: 1px solid #faad1450;
   animation: el-soar-pulse 1s ease-in-out infinite;
 }
-.el-soar-badge--done {
+.el-soar-status--done {
   background: #52c41a18;
   color: #52c41a;
   border: 1px solid #52c41a40;
 }
-.el-soar-badge--error {
+.el-soar-status--error {
   background: #e0525218;
   color: #e05252;
   border: 1px solid #e0525240;
@@ -307,18 +306,18 @@
 .el-risk-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   width: 100%;
-}
-.el-risk-fill {
-  height: 3px;
-  border-radius: 1.5px;
-  flex-shrink: 0;
+  overflow: hidden;
 }
 .el-risk-text {
+  flex-shrink: 0;
+  min-width: 24px;
+  text-align: right;
   font-size: 11px;
   color: var(--el-text-muted);
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
 .el-new-event-badge {

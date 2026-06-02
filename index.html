@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EventLens Demo</title>
   <link rel="icon" href="data:," />
-  <link rel="stylesheet" href="./dist/event-lens.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; height: 100%; }
@@ -86,7 +85,7 @@
       EventLens,
       ExportPlugin, LocalGeoIpPlugin, ThreatIntelPlugin,
       MitrePlugin, MaskingPlugin, SoarPlugin,
-    } from './dist/index.mjs'
+    } from './src/index.js'
 
     // ── Plugin mock data ───────────────────────────────────────────────────────
     const MOCK_GEO = {
@@ -207,11 +206,23 @@
         MaskingPlugin.configure({ fields: ['user'], reveal: true }),
         SoarPlugin.configure({
           playbooks: [
-            { id: 'auto-block', label: 'Critical IP 자동 차단', auto: true, cooldown: 30_000,
-              cooldownKey: e => e.src_ip, when: e => e.severity === 'critical' && !!e.src_ip,
-              endpoint: 'https://httpbin.org/post', payload: e => ({ src_ip: e.src_ip, rule_id: e.rule_id }) },
-            { id: 'isolate', label: '호스트 격리', auto: false, when: e => !!e.asset,
-              endpoint: 'https://httpbin.org/post', payload: e => ({ asset: e.asset, event_id: e.id }) },
+            {
+              id: 'auto-block', label: 'Critical IP 자동 차단',
+              auto: true, cooldown: 30_000, cooldownKey: e => e.src_ip,
+              when: e => e.severity === 'critical' && !!e.src_ip,
+              handler: async (e) => {
+                await new Promise(r => setTimeout(r, 400 + Math.random() * 400))
+                return { status: 'blocked', src_ip: e.src_ip }
+              },
+            },
+            {
+              id: 'isolate', label: '호스트 격리', auto: false,
+              when: e => !!e.asset,
+              handler: async (e) => {
+                await new Promise(r => setTimeout(r, 300 + Math.random() * 300))
+                return { status: 'isolated', asset: e.asset }
+              },
+            },
           ],
           onSuccess: (pb, ev) => { if (!pb.auto) alert(`✓ ${pb.label}\n${ev.src_ip || ev.asset}`) },
           onError:   (pb, ev, err) => console.warn('[SOAR]', pb.label, err.message),
@@ -227,7 +238,8 @@
         { id: 'rule_name', field: 'rule_name', label: 'Rule', width: 220 },
         { id: 'user', field: 'user', label: 'User', width: 120 },
         { id: 'asset', field: 'asset', label: 'Asset', width: 130 },
-        { id: 'risk_score', field: 'risk_score', label: 'Risk', width: 80 },
+        { id: 'risk_score',   field: 'risk_score',   label: 'Risk', width: 80 },
+        { id: '_soar_status', field: '_soar_status', label: 'SOAR', width: 110, sortable: false },
       ],
       highlightRules: [
         { priority: 100, when: event => event.severity === 'critical', className: 'el-row--highlight-critical' },

@@ -85,24 +85,25 @@ function createPlugin(options = {}) {
   }
 
   async function _run(playbook, event, ctx) {
-    const body = playbook.payload ? playbook.payload(event) : { event_id: event.id }
-
     ctx.emit('soar:running', { playbook: playbook.id, event })
 
     try {
-      const res = await fetch(playbook.endpoint, {
-        method:  playbook.method || 'POST',
-        headers: { 'Content-Type': 'application/json', ...(playbook.headers || {}) },
-        body:    JSON.stringify(body),
-      })
+      let data
 
-      const data = res.ok ? await res.json().catch(() => null) : null
-
-      if (!res.ok) {
-        const err = new Error(`SOAR API returned HTTP ${res.status}`)
-        onError?.(playbook, event, err)
-        ctx.emit('soar:error', { playbook: playbook.id, event, error: err })
-        return
+      if (typeof playbook.handler === 'function') {
+        // 커스텀 핸들러 — HTTP 없이 직접 처리
+        data = await playbook.handler(event)
+      } else {
+        const body = playbook.payload ? playbook.payload(event) : { event_id: event.id }
+        const res  = await fetch(playbook.endpoint, {
+          method:  playbook.method || 'POST',
+          headers: { 'Content-Type': 'application/json', ...(playbook.headers || {}) },
+          body:    JSON.stringify(body),
+        })
+        if (!res.ok) {
+          throw new Error(`SOAR API returned HTTP ${res.status}`)
+        }
+        data = await res.json().catch(() => null)
       }
 
       onSuccess?.(playbook, event, data)
@@ -117,45 +118,53 @@ function createPlugin(options = {}) {
   const _rowStatuses = new Map()
 
   const STATUS_LABEL = { running: 'SOAR 처리 중', done: 'SOAR 완료', error: 'SOAR 오류' }
-  const STATUS_ICON  = { running: '◌',            done: '✓',          error: '✗'        }
+  const STATUS_ICON  = { running: '◌', done: '✓', error: '✗' }
 
-  function _applyToRow(rowEl, eventId) {
-    rowEl.querySelector('.el-soar-badge')?.remove()
-    const status = _rowStatuses.get(eventId)
-    rowEl.dataset.soarStatus = status || ''
-    if (!status) return
-
-    const badge = document.createElement('span')
-    badge.className = `el-soar-badge el-soar-badge--${status}`
-    badge.title = STATUS_LABEL[status]
-    badge.setAttribute('aria-label', STATUS_LABEL[status])
-    badge.textContent = `${STATUS_ICON[status]} ${STATUS_LABEL[status]}`
-    rowEl.appendChild(badge)
+  function _renderStatusCell(value, event) {
+    const status = _rowStatuses.get(event.id)
+    if (!status) return document.createElement('span')
+    const span = document.createElement('span')
+    span.className = `el-soar-status el-soar-status--${status}`
+    span.title = STATUS_LABEL[status]
+    span.setAttribute('aria-label', STATUS_LABEL[status])
+    span.textContent = `${STATUS_ICON[status]} ${STATUS_LABEL[status]}`
+    return span
   }
 
-  function _updateVisibleRow(eventId) {
+  function _updateVisibleCell(eventId) {
     const rowEl = document.querySelector(`.el-row[data-event-id="${CSS.escape(eventId)}"]`)
-    if (rowEl) _applyToRow(rowEl, eventId)
+    if (!rowEl) return
+    rowEl.dataset.soarStatus = _rowStatuses.get(eventId) || ''
+    const cell = rowEl.querySelector('.el-cell[data-col-id="_soar_status"]')
+    if (cell) {
+      cell.innerHTML = ''
+      cell.appendChild(_renderStatusCell(null, { id: eventId }))
+    }
   }
 
   return {
     name: 'soar',
     install(ctx) {
-      // ── 행 상태 데코레이터 (스크롤 재렌더 시 상태 유지) ─────────────────────
-      ctx.registerRowDecorator((rowEl, event) => _applyToRow(rowEl, event.id))
+      // ── _soar_status 전용 열 필드 렌더러 ────────────────────────────────────
+      ctx.registerFieldRenderer('_soar_status', _renderStatusCell)
 
-      // ── 버스 이벤트 → 즉시 가시 행 업데이트 ────────────────────────────────
+      // ── 행 데코레이터: border-left 색상 (스크롤 재렌더 시 유지) ─────────────
+      ctx.registerRowDecorator((rowEl, event) => {
+        rowEl.dataset.soarStatus = _rowStatuses.get(event.id) || ''
+      })
+
+      // ── 버스 이벤트 → 즉시 가시 셀 업데이트 ────────────────────────────────
       ctx.on('soar:running', ({ event }) => {
         _rowStatuses.set(event.id, 'running')
-        _updateVisibleRow(event.id)
+        _updateVisibleCell(event.id)
       })
       ctx.on('soar:success', ({ event }) => {
         _rowStatuses.set(event.id, 'done')
-        _updateVisibleRow(event.id)
+        _updateVisibleCell(event.id)
       })
       ctx.on('soar:error', ({ event }) => {
         _rowStatuses.set(event.id, 'error')
-        _updateVisibleRow(event.id)
+        _updateVisibleCell(event.id)
       })
 
       // ── 모든 플레이북: ActionBar 수동 버튼 등록 ─────────────────────────────
