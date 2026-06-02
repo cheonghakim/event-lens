@@ -74,16 +74,43 @@
       <button class="demo-button" id="btn-density">Compact</button>
       <button class="demo-button" id="btn-add">Add 100</button>
       <button class="demo-button" id="btn-live">Start Live</button>
+      <button class="demo-button" id="btn-masking">Masking ON</button>
       <div class="demo-sep">|</div>
-      <div class="demo-info" id="demo-info">5,000 security events</div>
+      <div class="demo-info" id="demo-info">5,000 events · 6 plugins</div>
     </div>
     <div id="viewer"></div>
   </div>
 
   <script type="module">
-    import { EventLens, ExportPlugin } from './dist/index.mjs'
+    import {
+      EventLens,
+      ExportPlugin, LocalGeoIpPlugin, ThreatIntelPlugin,
+      MitrePlugin, MaskingPlugin, SoarPlugin,
+    } from './dist/index.mjs'
 
-    EventLens.use(ExportPlugin)
+    // ── Plugin mock data ───────────────────────────────────────────────────────
+    const MOCK_GEO = {
+      '10.0.0.1':      { countryCode: 'KR', country: 'Korea',         city: 'Seoul'         },
+      '10.0.0.2':      { countryCode: 'KR', country: 'Korea',         city: 'Seoul'         },
+      '192.168.99.1':  { countryCode: 'KR', country: 'Korea',         city: 'Busan'         },
+      '8.8.8.8':       { countryCode: 'US', country: 'United States', city: 'Mountain View' },
+      '1.1.1.1':       { countryCode: 'AU', country: 'Australia',     city: 'Sydney'        },
+    }
+    const MOCK_THREATS = {
+      '203.0.113.8':   { malicious: true,  score: 92, tags: ['botnet', 'scanner'], source: 'DemoIntel' },
+      '198.51.100.44': { malicious: true,  score: 78, tags: ['malware', 'c2'],     source: 'DemoIntel' },
+    }
+    const MITRE_RULE_MAP = {
+      'R1000': [{ id: 'T1021.004', name: 'Remote Services: SSH',         tactic: 'Lateral Movement'    }],
+      'R1001': [{ id: 'T1190',     name: 'Exploit Public-Facing App',    tactic: 'Initial Access'      }],
+      'R1002': [{ id: 'T1110',     name: 'Brute Force',                  tactic: 'Credential Access'   }],
+      'R1003': [{ id: 'T1498',     name: 'Network Denial of Service',    tactic: 'Impact'              }],
+      'R1004': [{ id: 'T1071',     name: 'Application Layer Protocol',   tactic: 'Command and Control' }],
+      'R1005': [{ id: 'T1046',     name: 'Network Service Discovery',    tactic: 'Discovery'           }],
+      'R1006': [{ id: 'T1068',     name: 'Privilege Escalation Exploit', tactic: 'Privilege Escalation'}],
+      'R1007': [{ id: 'T1041',     name: 'Exfiltration Over C2 Channel', tactic: 'Exfiltration'        }],
+      'R1008': [{ id: 'T1078',     name: 'Valid Accounts',               tactic: 'Defense Evasion'     }],
+    }
 
     const severities = ['critical', 'high', 'medium', 'low', 'info']
     const actions = ['blocked', 'denied', 'allowed', 'dropped', 'reset']
@@ -173,6 +200,24 @@
       theme: 'dark',
       density: 'normal',
       worker: true,
+      plugins: [
+        ExportPlugin,
+        LocalGeoIpPlugin.configure({ ipFields: ['dst_ip'], lookup: ip => MOCK_GEO[ip] || null }),
+        ThreatIntelPlugin.configure({ ipFields: ['src_ip'], lookup: async v => MOCK_THREATS[v] || { malicious: false, score: 1, tags: [], source: 'DemoIntel' } }),
+        MitrePlugin.configure({ ruleMap: MITRE_RULE_MAP }),
+        MaskingPlugin.configure({ fields: ['user'], reveal: true }),
+        SoarPlugin.configure({
+          playbooks: [
+            { id: 'auto-block', label: 'Critical IP 자동 차단', auto: true, cooldown: 30_000,
+              cooldownKey: e => e.src_ip, when: e => e.severity === 'critical' && !!e.src_ip,
+              endpoint: 'https://httpbin.org/post', payload: e => ({ src_ip: e.src_ip, rule_id: e.rule_id }) },
+            { id: 'isolate', label: '호스트 격리', auto: false, when: e => !!e.asset,
+              endpoint: 'https://httpbin.org/post', payload: e => ({ asset: e.asset, event_id: e.id }) },
+          ],
+          onSuccess: (pb, ev) => { if (!pb.auto) alert(`✓ ${pb.label}\n${ev.src_ip || ev.asset}`) },
+          onError:   (pb, ev, err) => console.warn('[SOAR]', pb.label, err.message),
+        }),
+      ],
       columns: [
         { id: 'severity', field: 'severity', label: 'Severity', width: 92 },
         { id: 'timestamp', field: 'timestamp', label: 'Time', width: 158 },
@@ -241,8 +286,18 @@
         const batch = Array.from({ length: Math.floor(Math.random() * 5) + 1 }, () => generateEvent())
         viewer._dataSource.pushLiveEvents?.(batch)
         viewer._grid.prependRows(batch)
-        info.textContent = `${viewer._dataSource.getTotalCount().toLocaleString()} security events`
+        viewer.emit('live:new-events', { events: batch, count: batch.length })
+        info.textContent = `${viewer._dataSource.getTotalCount().toLocaleString()} events · 6 plugins`
       }, 1200)
+    })
+
+    let maskingOn = true
+    document.getElementById('btn-masking').addEventListener('click', e => {
+      maskingOn = !maskingOn
+      viewer.emit('masking:toggle', { enabled: maskingOn })
+      viewer.refresh()
+      e.currentTarget.textContent = maskingOn ? 'Masking ON' : 'Masking OFF'
+      e.currentTarget.style.color = maskingOn ? '' : '#52c41a'
     })
   </script>
 </body>

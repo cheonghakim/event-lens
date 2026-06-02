@@ -37,7 +37,7 @@ jobs:
         run: |
           test -f dist/index.mjs      || (echo "MISSING: dist/index.mjs"      && exit 1)
           test -f dist/index.cjs      || (echo "MISSING: dist/index.cjs"      && exit 1)
-          test -f dist/tracescope.css || (echo "MISSING: dist/tracescope.css" && exit 1)
+          test -f dist/event-lens.css  || (echo "MISSING: dist/event-lens.css"  && exit 1)
           test -f docs/index.html     || (echo "MISSING: docs/index.html"     && exit 1)
           echo "All dist files present."
 
