@@ -43,7 +43,7 @@
   --el-log-text:       #2d2d2d;
 
   /* Severity — slightly darker for light background */
-  --el-color-critical: #c43030;
+  --el-color-critical: #a51d1d; /* improved contrast in light mode (>= 4.5:1) */
   --el-color-high:     #9c490a; /* improved contrast (>= 4.5:1) */
   --el-color-medium:   #7a5a0b; /* improved contrast (>= 4.5:1) */
   --el-color-low:      #2d7a35;
@@ -65,7 +65,7 @@
   --el-tactic-impact:              #c43030;
 
   /* Severity badge backgrounds */
-  --el-badge-bg-critical: rgba(196, 48,  48,  0.08);
+  --el-badge-bg-critical: rgba(165, 29, 29, 0.06);
   --el-badge-bg-high:     rgba(156, 73,  10,  0.08);
   --el-badge-bg-medium:   rgba(122, 90,  11,  0.08);
   --el-badge-bg-low:      rgba(45,  122, 53,  0.08);
