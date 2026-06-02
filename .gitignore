@@ -3,3 +3,6 @@ dist/
 docs/
 .DS_Store
 *.local
+package-lock.json
+yarn.lock
+.env
