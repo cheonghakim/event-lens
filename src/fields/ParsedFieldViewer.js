@@ -115,7 +115,9 @@ export class ParsedFieldViewer {
       if (pluginRenderer) {
         const rendered = pluginRenderer(value, event)
         if (rendered instanceof HTMLElement) tdVal.appendChild(rendered)
-        else tdVal.innerHTML = rendered || ''
+        // String returns are treated as plain text, not HTML — a renderer that
+        // needs markup should return an HTMLElement instead.
+        else tdVal.textContent = rendered != null ? String(rendered) : ''
       } else {
         tdVal.innerHTML = `<span class="el-field-val-text">${escapeHtml(this._formatValue(value))}</span>`
       }

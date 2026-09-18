@@ -92,7 +92,9 @@ export class StateManager {
   }
 
   clear() {
-    try { localStorage.removeItem(this._key) } catch {}
+    try { localStorage.removeItem(this._key) } catch {
+      // Persistence is best-effort — ignore storage failures
+    }
   }
 
   // ── Private ─────────────────────────────────────────────────────────────────
@@ -116,7 +118,9 @@ export class StateManager {
       obj._v = this._version
       obj[section] = value
       localStorage.setItem(this._key, JSON.stringify(obj))
-    } catch {}
+    } catch {
+      // Persistence is best-effort — ignore storage failures
+    }
   }
 
   _remove(section) {
@@ -126,6 +130,8 @@ export class StateManager {
       const obj = JSON.parse(raw)
       delete obj[section]
       localStorage.setItem(this._key, JSON.stringify(obj))
-    } catch {}
+    } catch {
+      // Persistence is best-effort — ignore storage failures
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { el, escapeHtml, clearEl } from '../utils/dom.js'
+import { el, clearEl } from '../utils/dom.js'
 import { formatTimestamp }          from '../utils/formatters.js'
 
 // Short text codes instead of emoji — clean, readable in any font

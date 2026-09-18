@@ -142,6 +142,8 @@ columns: [
 ]
 ```
 
+> **Note:** `renderer` (and `registerFieldRenderer` from the plugin API) must return either an `HTMLElement` or a plain string. A returned string is inserted as **text**, not HTML — it is never parsed as markup, so event data cannot inject elements or attributes even when it originates from an untrusted stream. If a renderer needs markup (icons, links, badges), build and return an `HTMLElement` instead.
+
 Default columns are `severity`, `timestamp`, `src_ip`, `dst_ip`, `action`, `rule_name`, `user`, and `asset`.
 
 ### Data Sources

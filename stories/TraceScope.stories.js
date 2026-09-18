@@ -51,7 +51,7 @@ export const Default = {
     const div = document.createElement('div')
     div.style.cssText = 'width:100%;height:100vh'
 
-    const viewer = new EventLens({
+    new EventLens({
       container: div,
       dataSource: makeEvents(count),
       theme,

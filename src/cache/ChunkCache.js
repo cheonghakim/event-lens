@@ -53,14 +53,18 @@ export class ChunkCache {
     try {
       await this._ensureReady()
       await this._idbDelete(key)
-    } catch {}
+    } catch {
+      // Cache is best-effort — ignore IndexedDB failures
+    }
   }
 
   async clear() {
     try {
       await this._ensureReady()
       await this._idbClear()
-    } catch {}
+    } catch {
+      // Cache is best-effort — ignore IndexedDB failures
+    }
   }
 
   // Evict all expired entries
@@ -73,7 +77,9 @@ export class ChunkCache {
         const record = await this._idbGet(key)
         if (record && now > record.expiresAt) await this._idbDelete(key)
       }
-    } catch {}
+    } catch {
+      // Cache is best-effort — ignore IndexedDB failures
+    }
   }
 
   destroy() {

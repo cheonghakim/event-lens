@@ -85,7 +85,9 @@ export class RowRenderer {
         cellEl.innerHTML = ''
         cellEl.appendChild(result)
       } else {
-        cellEl.innerHTML = result || ''
+        // String returns are treated as plain text, not HTML — a renderer that
+        // needs markup should return an HTMLElement instead.
+        cellEl.textContent = result != null ? String(result) : ''
       }
       return
     }
@@ -97,7 +99,7 @@ export class RowRenderer {
         cellEl.innerHTML = ''
         cellEl.appendChild(result)
       } else {
-        cellEl.innerHTML = result || ''
+        cellEl.textContent = result != null ? String(result) : ''
       }
       return
     }
@@ -123,7 +125,7 @@ export class RowRenderer {
   _renderSeverityBadge(severity) {
     const sev   = severity || 'unknown'
     const label = severityLabel(sev)
-    return `<span class="el-badge el-badge--${sev}" aria-label="Severity: ${sev}">${label}</span>`
+    return `<span class="el-badge el-badge--${escapeHtml(sev)}" aria-label="Severity: ${escapeHtml(sev)}">${escapeHtml(label)}</span>`
   }
 
   _renderRiskScore(score) {
