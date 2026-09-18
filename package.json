@@ -1,6 +1,6 @@
 {
   "name": "event-lens",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Enterprise security event viewer library for SOC/SIEM/SOAR",
   "license": "MIT",
   "homepage": "https://cheonghakim.github.io/event-lens",
