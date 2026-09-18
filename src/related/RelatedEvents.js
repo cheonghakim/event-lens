@@ -53,31 +53,18 @@ export class RelatedEvents {
         })
         group.appendChild(groupLabel)
 
-        related.slice(0, 10).forEach(r => {
-          const item = el('div', 'el-related-item')
-
-          const sev = el('span', 'el-related-item-sev')
-          sev.innerHTML = `<span class="el-badge el-badge--${r.severity || 'unknown'}">${this._sevLabel(r.severity)}</span>`
-
-          const name = el('span', 'el-related-item-name', { textContent: r.rule_name || r.id })
-          const time = el('span', 'el-related-item-time', { textContent: formatTimestamp(r.timestamp) })
-
-          item.appendChild(sev)
-          item.appendChild(name)
-          item.appendChild(time)
-
-          this._cleanups.push(on(item, 'click', () => {
-            this._bus.emit('event:selected', { event: r })
-            this._core._grid?.selectEventById(r.id)
-          }))
-
-          group.appendChild(item)
-        })
+        related.slice(0, 10).forEach(r => group.appendChild(this._renderItem(r)))
 
         if (related.length > 10) {
-          const more = el('div', 'el-related-empty', {
-            textContent: `+ ${related.length - 10}건 더 있음`,
+          const remaining = related.slice(10)
+          const more = el('button', 'el-related-more', {
+            type:         'button',
+            textContent:  `+ ${remaining.length}건 더 보기`,
           })
+          this._cleanups.push(on(more, 'click', () => {
+            remaining.forEach(r => group.insertBefore(this._renderItem(r), more))
+            more.remove()
+          }))
           group.appendChild(more)
         }
 
@@ -110,6 +97,27 @@ export class RelatedEvents {
     } catch {
       return []
     }
+  }
+
+  _renderItem(r) {
+    const item = el('div', 'el-related-item')
+
+    const sev = el('span', 'el-related-item-sev')
+    sev.innerHTML = `<span class="el-badge el-badge--${r.severity || 'unknown'}">${this._sevLabel(r.severity)}</span>`
+
+    const name = el('span', 'el-related-item-name', { textContent: r.rule_name || r.id })
+    const time = el('span', 'el-related-item-time', { textContent: formatTimestamp(r.timestamp) })
+
+    item.appendChild(sev)
+    item.appendChild(name)
+    item.appendChild(time)
+
+    this._cleanups.push(on(item, 'click', () => {
+      this._bus.emit('event:selected', { event: r })
+      this._core._grid?.selectEventById(r.id)
+    }))
+
+    return item
   }
 
   _sevLabel(sev) {

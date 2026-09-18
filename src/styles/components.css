@@ -723,7 +723,10 @@
   outline-offset: -1px;
 }
 
-.el-detail-close-btn {
+/* Specificity note: base.css's ".el-root button" reset (1 class + 1 element)
+   otherwise beats a single ".el-detail-close-btn" class, so these are scoped
+   under their real ".el-detail-header" ancestor to win. */
+.el-detail-header .el-detail-close-btn {
   width: 28px;
   height: 28px;
   border: 1px solid var(--el-border);
@@ -742,7 +745,7 @@
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.el-detail-close-btn:hover {
+.el-detail-header .el-detail-close-btn:hover {
   border-color: var(--el-border-hover);
   color: var(--el-text);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -773,7 +776,10 @@
   border-radius: 2px;
 }
 
-.el-action-btn {
+/* Specificity note: base.css's ".el-root button" reset (1 class + 1 element)
+   otherwise beats a single ".el-action-btn" class, so every rule here is
+   scoped under the real ".el-action-bar" ancestor to win. */
+.el-action-bar .el-action-btn {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -795,38 +801,38 @@
     background 0.12s;
 }
 
-.el-action-btn:hover:not(:disabled) {
+.el-action-bar .el-action-btn:hover:not(:disabled) {
   border-color: var(--el-border-hover);
   color: var(--el-text);
 }
 
-.el-action-btn--builtin:hover:not(:disabled) {
+.el-action-bar .el-action-btn--builtin:hover:not(:disabled) {
   border-color: var(--el-border-hover);
   color: var(--el-text-secondary);
 }
 
-.el-action-btn:active:not(:disabled) {
+.el-action-bar .el-action-btn:active:not(:disabled) {
   background: rgba(37, 99, 235, 0.08);
 }
 
-.el-action-btn:focus-visible {
+.el-action-bar .el-action-btn:focus-visible {
   outline: 2px solid var(--el-accent);
   outline-offset: 2px;
 }
 
-.el-action-btn--disabled,
-.el-action-btn:disabled {
+.el-action-bar .el-action-btn--disabled,
+.el-action-bar .el-action-btn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
   border-color: var(--el-border);
 }
 
-.el-action-btn--builtin {
+.el-action-bar .el-action-btn--builtin {
   border-style: dashed;
   color: var(--el-text-muted);
   background: transparent;
 }
-.el-action-btn--builtin:hover:not(:disabled) {
+.el-action-bar .el-action-btn--builtin:hover:not(:disabled) {
   border-style: solid;
 }
 
@@ -1399,6 +1405,18 @@
   color: var(--el-text-muted);
   font-size: 11px;
   padding: 8px 4px;
+}
+
+.el-related-more {
+  display: block;
+  color: var(--el-accent);
+  font-size: 11px;
+  font-family: inherit;
+  padding: 5px 6px;
+  cursor: pointer;
+}
+.el-related-more:hover {
+  text-decoration: underline;
 }
 
 .el-grid-body,
